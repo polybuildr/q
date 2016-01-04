@@ -4,7 +4,7 @@
 enum class Type { INT, CHAR, BOOL, FLOAT };
 enum class NodeType { STATEMENTS_LIST, ASSIGNMENT, PRINT, LOCATION, BINARY_EXPR, INT_LITERAL };
 
-#define ACCEPT_VISITOR(CLASS) void CLASS::accept(Visitor *v) { v->visit(this); }
+#define ACCEPT_VISITOR(CLASS) Value* CLASS::accept(Visitor *v) { return v->visit(this); }
 
 void ListNode::append(ASTNode *node) {
     list.push_back(node);

@@ -47,6 +47,7 @@ printer: '@' expr { $$ = new PrintNode($2); }
        ;
 
 expr: INT_LITERAL { $$ = new IntLiteralNode($1); }
+    | location
     | expr '+' expr { $$ = new BinaryExpressionNode($1, "+", $3); }
     | expr '-' expr { $$ = new BinaryExpressionNode($1, "-", $3); }
     | expr '*' expr { $$ = new BinaryExpressionNode($1, "*", $3); }

@@ -5,8 +5,9 @@
 #include <string>
 
 class Visitor;
+class Value;
 
-#define ACCEPT_VISITOR_DECLARE void accept(Visitor *v);
+#define ACCEPT_VISITOR_DECLARE Value* accept(Visitor *v);
 
 enum class Type;
 enum class NodeType;
@@ -16,7 +17,7 @@ protected:
     Type type;
     NodeType nodeType;
 public:
-    virtual void accept(Visitor *v) = 0;
+    virtual Value* accept(Visitor *v) = 0;
 };
 
 class ListNode {

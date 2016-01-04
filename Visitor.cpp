@@ -1,29 +1,64 @@
 #include "Visitor.hpp"
 #include "AST.hpp"
 
-void Visitor::visit(StatementsListNode *node) {
+#include <map>
+
+std::map<std::string, Value*> symbols;
+
+class Value {
+private:
+    int value;
+public:
+    Value(int value): value(value) {
+
+    }
+    void setValue(int val) {
+        value = val;
+    }
+    int getValue() {
+        return value;
+    }
+};
+
+Value* Visitor::visit(StatementsListNode *node) {
     for (ASTNode *statement : (node->list)) {
-        printf("statement encountered\n");
         statement->accept(this);
     }
+    return nullptr;
 }
 
-void Visitor::visit(AssignmentNode *node) {
-    printf("assignment\n");
+Value* Visitor::visit(AssignmentNode *node) {
+    std::string id = dynamic_cast<LocationNode *>(node->locationNode)->id;
+    Value* value = node->value->accept(this);
+    symbols[id] = value;
+    return nullptr;
 }
 
-void Visitor::visit(PrintNode *node) {
-    printf("print\n");
+Value* Visitor::visit(PrintNode *node) {
+    Value *value = node->expr->accept(this);
+    printf("@ %d\n", value->getValue());
+    return nullptr;
 }
 
-void Visitor::visit(LocationNode *node) {
-    printf("location\n");
+Value* Visitor::visit(LocationNode *node) {
+    if (symbols.find(node->id) != symbols.end()) {
+        return symbols[node->id];
+    } else {
+        printf("error: use of undeclared identifier %s, exiting\n", node->id.c_str());
+        exit(1);
+    }
+    return nullptr;
 }
 
-void Visitor::visit(BinaryExpressionNode *node) {
-    printf("bin expr\n");
+Value* Visitor::visit(BinaryExpressionNode *node) {
+    if (node->op == "+") {
+        Value *value1 = node->expr1->accept(this);
+        Value *value2 = node->expr2->accept(this);
+        return new Value(value1->getValue() + value2->getValue());
+    }
+    return nullptr;
 }
 
-void Visitor::visit(IntLiteralNode *node) {
-    printf("int literal\n");
+Value* Visitor::visit(IntLiteralNode *node) {
+    return new Value(node->value);
 }

@@ -10,14 +10,16 @@ class LocationNode;
 class BinaryExpressionNode;
 class IntLiteralNode;
 
+class Value;
+
 class Visitor {
 public:
-    void visit(StatementsListNode *);
-    void visit(AssignmentNode *);
-    void visit(PrintNode *);
-    void visit(LocationNode *);
-    void visit(BinaryExpressionNode *);
-    void visit(IntLiteralNode *);
+    Value* visit(StatementsListNode *);
+    Value* visit(AssignmentNode *);
+    Value* visit(PrintNode *);
+    Value* visit(LocationNode *);
+    Value* visit(BinaryExpressionNode *);
+    Value* visit(IntLiteralNode *);
 };
 
 #endif
