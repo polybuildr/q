@@ -1,7 +1,6 @@
 #include "AST.hpp"
 #include "Visitor.hpp"
 
-enum class Type { INT, CHAR, BOOL, FLOAT };
 enum class NodeType { STATEMENTS_LIST, ASSIGNMENT, PRINT, LOCATION, BINARY_EXPR, INT_LITERAL };
 
 #define ACCEPT_VISITOR(CLASS) Value* CLASS::accept(Visitor *v) { return v->visit(this); }
@@ -11,7 +10,7 @@ void ListNode::append(ASTNode *node) {
 }
 
 StatementsListNode::StatementsListNode() {
-        nodeType = NodeType::STATEMENTS_LIST;
+    nodeType = NodeType::STATEMENTS_LIST;
 }
 
 ACCEPT_VISITOR(StatementsListNode)

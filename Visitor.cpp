@@ -1,24 +1,12 @@
+#include <map>
+
 #include "Visitor.hpp"
 #include "AST.hpp"
-
-#include <map>
+#include "Value.hpp"
 
 std::map<std::string, Value*> symbols;
 
-class Value {
-private:
-    int value;
-public:
-    Value(int value): value(value) {
-
-    }
-    void setValue(int val) {
-        value = val;
-    }
-    int getValue() {
-        return value;
-    }
-};
+enum class Type { INT, CHAR, BOOL, FLOAT };
 
 Value* Visitor::visit(StatementsListNode *node) {
     for (ASTNode *statement : (node->list)) {

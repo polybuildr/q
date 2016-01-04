@@ -9,12 +9,10 @@ class Value;
 
 #define ACCEPT_VISITOR_DECLARE Value* accept(Visitor *v);
 
-enum class Type;
 enum class NodeType;
 
 class ASTNode {
 protected:
-    Type type;
     NodeType nodeType;
 public:
     virtual Value* accept(Visitor *v) = 0;
