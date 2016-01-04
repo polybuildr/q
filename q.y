@@ -27,7 +27,8 @@ StatementsListNode *program;
 
 %type <node> statements statement assignment printer expr location
 
-%left '-' '+' '*' '/'
+%left '-' '+'
+%left '*' '/'
 
 %%
 statements: /* empty */ { $$ = new StatementsListNode(); program = dynamic_cast<StatementsListNode *>$$; }

@@ -387,7 +387,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   15
+#define YYLAST   18
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  11
@@ -443,8 +443,8 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    33,    33,    34,    36,    37,    40,    43,    46,    49,
-      50,    51,    52,    53,    54
+       0,    34,    34,    35,    37,    38,    41,    44,    47,    50,
+      51,    52,    53,    54,    55
 };
 #endif
 
@@ -484,7 +484,7 @@ static const yytype_uint16 yytoknum[] =
 static const yytype_int8 yypact[] =
 {
       -6,     0,    -6,    -6,     2,    -6,    -6,     5,    -6,    -6,
-      -6,    -5,     2,     2,     2,     2,     2,    -5,    -6,    -6,
+      -6,    -5,     2,     2,     2,     2,     2,    -5,     8,     8,
       -6,    -6
 };
 
@@ -501,7 +501,7 @@ static const yytype_uint8 yydefact[] =
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -6,    -6,    -6,    -6,     8,    -6,    -1
+      -6,    -6,    -6,    -6,    17,    -6,    -1
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
@@ -515,14 +515,14 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_uint8 yytable[] =
 {
-       2,    13,    14,    15,    16,     3,     9,     3,    12,     7,
-       4,    17,    18,    19,    20,    21
+       2,    13,    14,    15,    16,     3,     9,     3,    12,     0,
+       4,    17,    18,    19,    20,    21,    15,    16,     7
 };
 
-static const yytype_uint8 yycheck[] =
+static const yytype_int8 yycheck[] =
 {
-       0,     6,     7,     8,     9,     5,     4,     5,     3,     1,
-      10,    12,    13,    14,    15,    16
+       0,     6,     7,     8,     9,     5,     4,     5,     3,    -1,
+      10,    12,    13,    14,    15,    16,     8,     9,     1
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
@@ -1222,61 +1222,61 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 33 "q.y" /* yacc.c:1646  */
+#line 34 "q.y" /* yacc.c:1646  */
     { (yyval.node) = new StatementsListNode(); program = dynamic_cast<StatementsListNode *>(yyval.node); }
 #line 1228 "q.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 34 "q.y" /* yacc.c:1646  */
+#line 35 "q.y" /* yacc.c:1646  */
     { (yyval.node) = (yyvsp[-1].node); dynamic_cast<StatementsListNode *>((yyval.node))->append((yyvsp[0].node)); }
 #line 1234 "q.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
-#line 40 "q.y" /* yacc.c:1646  */
+#line 41 "q.y" /* yacc.c:1646  */
     { (yyval.node) = new AssignmentNode((yyvsp[-2].node), (yyvsp[0].node)); }
 #line 1240 "q.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 43 "q.y" /* yacc.c:1646  */
+#line 44 "q.y" /* yacc.c:1646  */
     { (yyval.node) = new LocationNode((yyvsp[0].sval)); }
 #line 1246 "q.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 46 "q.y" /* yacc.c:1646  */
+#line 47 "q.y" /* yacc.c:1646  */
     { (yyval.node) = new PrintNode((yyvsp[0].node)); }
 #line 1252 "q.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 49 "q.y" /* yacc.c:1646  */
+#line 50 "q.y" /* yacc.c:1646  */
     { (yyval.node) = new IntLiteralNode((yyvsp[0].ival)); }
 #line 1258 "q.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 51 "q.y" /* yacc.c:1646  */
+#line 52 "q.y" /* yacc.c:1646  */
     { (yyval.node) = new BinaryExpressionNode((yyvsp[-2].node), "+", (yyvsp[0].node)); }
 #line 1264 "q.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 52 "q.y" /* yacc.c:1646  */
+#line 53 "q.y" /* yacc.c:1646  */
     { (yyval.node) = new BinaryExpressionNode((yyvsp[-2].node), "-", (yyvsp[0].node)); }
 #line 1270 "q.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 53 "q.y" /* yacc.c:1646  */
+#line 54 "q.y" /* yacc.c:1646  */
     { (yyval.node) = new BinaryExpressionNode((yyvsp[-2].node), "*", (yyvsp[0].node)); }
 #line 1276 "q.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 54 "q.y" /* yacc.c:1646  */
+#line 55 "q.y" /* yacc.c:1646  */
     { (yyval.node) = new BinaryExpressionNode((yyvsp[-2].node), "/", (yyvsp[0].node)); }
 #line 1282 "q.tab.c" /* yacc.c:1646  */
     break;
@@ -1510,7 +1510,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 56 "q.y" /* yacc.c:1906  */
+#line 57 "q.y" /* yacc.c:1906  */
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
