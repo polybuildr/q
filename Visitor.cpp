@@ -41,7 +41,7 @@ Value* Visitor::visit(BinaryExpressionNode *node) {
     Value *value1 = node->expr1->accept(this);
     Value *value2 = node->expr2->accept(this);
 
-    return Operations::perform(value1, node->op, value2);
+    return Operations::performBinary(value1, node->op, value2);
 }
 
 Value* Visitor::visit(IntLiteralNode *node) {

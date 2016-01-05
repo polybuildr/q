@@ -1,0 +1,8 @@
+x := true && false
+@ x
+y := true && true
+@ y
+p := true || false
+@ p
+q := false || false
+@ q

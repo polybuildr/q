@@ -23,6 +23,8 @@ StatementsListNode *program;
 %token ASSIGN_OP
 %token TRUE
 %token FALSE
+%token LOGICAL_AND
+%token LOGICAL_OR
 
 %token <ival> INT_LITERAL
 %token <sval> IDENTIFIER
@@ -55,6 +57,8 @@ expr: literal { $$ = $1; }
     | expr '-' expr { $$ = new BinaryExpressionNode($1, "-", $3); }
     | expr '*' expr { $$ = new BinaryExpressionNode($1, "*", $3); }
     | expr '/' expr { $$ = new BinaryExpressionNode($1, "/", $3); }
+    | expr LOGICAL_AND expr { $$ = new BinaryExpressionNode($1, "&&", $3); }
+    | expr LOGICAL_OR expr { $$ = new BinaryExpressionNode($1, "||", $3); }
     ;
 
 literal: INT_LITERAL { $$ = new IntLiteralNode($1); }
