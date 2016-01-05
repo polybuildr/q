@@ -3,10 +3,9 @@
 #include "Visitor.hpp"
 #include "AST.hpp"
 #include "Value.hpp"
+#include "Utils.cpp"
 
 std::map<std::string, Value*> symbols;
-
-enum class Type { INT, CHAR, BOOL, FLOAT };
 
 Value* Visitor::visit(StatementsListNode *node) {
     for (ASTNode *statement : (node->list)) {
@@ -24,7 +23,7 @@ Value* Visitor::visit(AssignmentNode *node) {
 
 Value* Visitor::visit(PrintNode *node) {
     Value *value = node->expr->accept(this);
-    printf("%d\n", value->getValue());
+    value->print();
     return nullptr;
 }
 
@@ -42,33 +41,13 @@ Value* Visitor::visit(BinaryExpressionNode *node) {
     Value *value1 = node->expr1->accept(this);
     Value *value2 = node->expr2->accept(this);
 
-    switch (node->op[0]) {
-        case '+':
-            if (node->op.length() == 1) {
-                return new Value(value1->getValue() + value2->getValue());
-            }
-            break;
-        case '-':
-            if (node->op.length() == 1) {
-                return new Value(value1->getValue() - value2->getValue());
-            }
-            break;
-        case '*':
-            if (node->op.length() == 1) {
-                return new Value(value1->getValue() * value2->getValue());
-            }
-            break;
-        case '/':
-            if (node->op.length() == 1) {
-                return new Value(value1->getValue() / value2->getValue());
-            }
-            break;
-        default:
-            return nullptr;
-    }
-    return nullptr;
+    return Operations::perform(value1, node->op, value2);
 }
 
 Value* Visitor::visit(IntLiteralNode *node) {
-    return new Value(node->value);
+    return new Integer(node->value);
+}
+
+Value* Visitor::visit(BoolLiteralNode *node) {
+    return new Boolean(node->value);
 }

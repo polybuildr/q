@@ -1,7 +1,7 @@
 #include "AST.hpp"
 #include "Visitor.hpp"
 
-enum class NodeType { STATEMENTS_LIST, ASSIGNMENT, PRINT, LOCATION, BINARY_EXPR, INT_LITERAL };
+enum class NodeType { STATEMENTS_LIST, ASSIGNMENT, PRINT, LOCATION, BINARY_EXPR, INT_LITERAL, BOOL_LITERAL };
 
 #define ACCEPT_VISITOR(CLASS) Value* CLASS::accept(Visitor *v) { return v->visit(this); }
 
@@ -52,3 +52,10 @@ value(value) {
 }
 
 ACCEPT_VISITOR(IntLiteralNode)
+
+BoolLiteralNode::BoolLiteralNode(bool value):
+value(value) {
+    nodeType = NodeType::BOOL_LITERAL;
+}
+
+ACCEPT_VISITOR(BoolLiteralNode)

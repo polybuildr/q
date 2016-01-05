@@ -21,11 +21,13 @@ StatementsListNode *program;
 }
 
 %token ASSIGN_OP
+%token TRUE
+%token FALSE
 
 %token <ival> INT_LITERAL
 %token <sval> IDENTIFIER
 
-%type <node> statements statement assignment printer expr location
+%type <node> statements statement assignment printer expr location literal
 
 %left '-' '+'
 %left '*' '/'
@@ -47,13 +49,18 @@ location: IDENTIFIER { $$ = new LocationNode($1); }
 printer: '@' expr { $$ = new PrintNode($2); }
        ;
 
-expr: INT_LITERAL { $$ = new IntLiteralNode($1); }
+expr: literal { $$ = $1; }
     | location
     | expr '+' expr { $$ = new BinaryExpressionNode($1, "+", $3); }
     | expr '-' expr { $$ = new BinaryExpressionNode($1, "-", $3); }
     | expr '*' expr { $$ = new BinaryExpressionNode($1, "*", $3); }
     | expr '/' expr { $$ = new BinaryExpressionNode($1, "/", $3); }
     ;
+
+literal: INT_LITERAL { $$ = new IntLiteralNode($1); }
+       | TRUE { $$ = new BoolLiteralNode(true); }
+       | FALSE { $$ = new BoolLiteralNode(false); }
+       ;
 %%
 int main(int argc, char* argv[]) {
     if (argc < 2) {

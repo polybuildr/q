@@ -74,4 +74,12 @@ public:
     IntLiteralNode(int value);
 };
 
+class BoolLiteralNode: public virtual ASTNode {
+public:
+    ACCEPT_VISITOR_DECLARE
+
+    bool value;
+    BoolLiteralNode(bool value);
+};
+
 #endif

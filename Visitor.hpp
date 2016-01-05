@@ -9,6 +9,7 @@ class PrintNode;
 class LocationNode;
 class BinaryExpressionNode;
 class IntLiteralNode;
+class BoolLiteralNode;
 
 class Value;
 
@@ -20,6 +21,7 @@ public:
     Value* visit(LocationNode *);
     Value* visit(BinaryExpressionNode *);
     Value* visit(IntLiteralNode *);
+    Value* visit(BoolLiteralNode *);
 };
 
 #endif
