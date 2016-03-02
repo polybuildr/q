@@ -10,11 +10,11 @@ using namespace std;
 %%
 true { return TRUE; }
 false { return FALSE; }
+var { return VAR; }
 \&\& { return LOGICAL_AND; }
 \|\| { return LOGICAL_OR; }
 [[:digit:]]+ { yylval.ival = atoi(yytext); return INT_LITERAL; }
-[@+\-*/] { return yytext[0]; }
+[@+\-*/=] { return yytext[0]; }
 [[:alpha:]][[:alnum:]]* { yylval.sval = strdup(yytext); return IDENTIFIER; }
-\:\= { return ASSIGN_OP; }
 [\t \n] { /* ignore */ }
 %%

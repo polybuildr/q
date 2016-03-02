@@ -20,11 +20,11 @@ StatementsListNode *program;
     ASTNode *node;
 }
 
-%token ASSIGN_OP
 %token TRUE
 %token FALSE
 %token LOGICAL_AND
 %token LOGICAL_OR
+%token VAR
 
 %token <ival> INT_LITERAL
 %token <sval> IDENTIFIER
@@ -33,6 +33,7 @@ StatementsListNode *program;
 
 %left '-' '+'
 %left '*' '/'
+%left LOGICAL_OR LOGICAL_AND
 
 %%
 statements: /* empty */ { $$ = new StatementsListNode(); program = dynamic_cast<StatementsListNode *>$$; }
@@ -42,7 +43,7 @@ statement: assignment
          | printer
          ;
 
-assignment: location ASSIGN_OP expr { $$ = new AssignmentNode($1, $3); }
+assignment: VAR location '=' expr { $$ = new AssignmentNode($2, $4); }
           ;
 
 location: IDENTIFIER { $$ = new LocationNode($1); }

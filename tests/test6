@@ -1,8 +1,8 @@
-x := true && false
+var x = true && false
 @ x
-y := true && true
+var y = true && true
 @ y
-p := true || false
+var p = true || false
 @ p
-q := false || false
+var q = false || false
 @ q

@@ -1,0 +1,7 @@
+var x = 1
+var y = true
+
+@ x
+@ y
+var z = x && y
+@ z
