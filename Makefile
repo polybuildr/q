@@ -1,5 +1,5 @@
 q: q.tab.c lex.yy.c AST.cpp AST.hpp Visitor.cpp Visitor.hpp Value.cpp Value.hpp Utils.cpp
-	clang++ -Wno-deprecated-register -std=c++11 Value.cpp Visitor.cpp AST.cpp q.tab.c lex.yy.c -lfl -o q
+	clang++ -g -Wno-deprecated-register -std=c++11 Value.cpp Visitor.cpp AST.cpp -x c++ q.tab.c -x c++ lex.yy.c -lfl -o q
 
 q.tab.c: q.y
 	bison -d q.y
