@@ -1,16 +1,23 @@
 #include <map>
+#include <list>
 
 #include "Visitor.hpp"
 #include "AST.hpp"
 #include "Value.hpp"
 #include "Utils.cpp"
 
-std::map<std::string, Value*> symbols;
+Visitor::Visitor() {
+    std::map<std::string, Value*> frame;
+    symbols.push_back(frame);
+}
 
 Value* Visitor::visit(StatementsListNode *node) {
+    std::map<std::string, Value*> frame;
+    symbols.push_back(frame);
     for (ASTNode *statement : (node->list)) {
         statement->accept(this);
     }
+    symbols.pop_back();
     return nullptr;
 }
 
@@ -22,19 +29,25 @@ Value* Visitor::visit(BlockNode *node) {
 Value* Visitor::visit(AssignmentNode *node) {
     std::string id = dynamic_cast<LocationNode *>(node->locationNode)->id;
     if (!node->isAlsoDeclaration) {
-        if (symbols.find(id) == symbols.end()) {
-            printf("error: use of undeclared identifier %s, exiting\n", id.c_str());
-            exit(1);
+        for (auto it = symbols.rbegin(); it != symbols.rend(); ++it) {
+            if ((*it).find(id) != (*it).end()) {
+                Value* value = node->value->accept(this);
+                (*it)[id] = value;
+                return nullptr;
+            }
         }
+        printf("error: use of undeclared identifier '%s', exiting\n", id.c_str());
+        exit(1);
+    } else {
+        Value* value = node->value->accept(this);
+        symbols.back()[id] = value;
     }
-    Value* value = node->value->accept(this);
-    symbols[id] = value;
     return nullptr;
 }
 
 Value* Visitor::visit(DeclarationNode *node) {
     std::string id = dynamic_cast<LocationNode *>(node->locationNode)->id;
-    symbols[id] = nullptr; // TODO: Create `undefined` or something
+    symbols.back()[id] = nullptr; // TODO: Create `undefined` or something
     return nullptr;
 }
 
@@ -45,12 +58,13 @@ Value* Visitor::visit(PrintNode *node) {
 }
 
 Value* Visitor::visit(LocationNode *node) {
-    if (symbols.find(node->id) != symbols.end()) {
-        return symbols[node->id];
-    } else {
-        printf("error: use of undeclared identifier %s, exiting\n", node->id.c_str());
-        exit(1);
+    for (auto it = symbols.rbegin(); it != symbols.rend(); ++it) {
+        if ((*it).find(node->id) != (*it).end()) {
+            return (*it)[node->id];
+        }
     }
+    printf("error: use of undeclared identifier '%s', exiting\n", node->id.c_str());
+    exit(1);
     return nullptr;
 }
 

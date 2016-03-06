@@ -2,6 +2,8 @@
 #define VISITOR_HPP
 
 #include <cstdio>
+#include <list>
+#include <map>
 
 class StatementsListNode;
 class BlockNode;
@@ -16,6 +18,8 @@ class BoolLiteralNode;
 class Value;
 
 class Visitor {
+protected:
+    std::list< std::map<std::string, Value*> > symbols;
 public:
     Value* visit(StatementsListNode *);
     Value* visit(BlockNode *);
@@ -26,6 +30,7 @@ public:
     Value* visit(BinaryExpressionNode *);
     Value* visit(IntLiteralNode *);
     Value* visit(BoolLiteralNode *);
+    Visitor();
 };
 
 #endif
