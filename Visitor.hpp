@@ -6,6 +6,7 @@
 class StatementsListNode;
 class BlockNode;
 class AssignmentNode;
+class DeclarationNode;
 class PrintNode;
 class LocationNode;
 class BinaryExpressionNode;
@@ -19,6 +20,7 @@ public:
     Value* visit(StatementsListNode *);
     Value* visit(BlockNode *);
     Value* visit(AssignmentNode *);
+    Value* visit(DeclarationNode *);
     Value* visit(PrintNode *);
     Value* visit(LocationNode *);
     Value* visit(BinaryExpressionNode *);

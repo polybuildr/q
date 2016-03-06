@@ -21,8 +21,20 @@ Value* Visitor::visit(BlockNode *node) {
 
 Value* Visitor::visit(AssignmentNode *node) {
     std::string id = dynamic_cast<LocationNode *>(node->locationNode)->id;
+    if (!node->isAlsoDeclaration) {
+        if (symbols.find(id) == symbols.end()) {
+            printf("error: use of undeclared identifier %s, exiting\n", id.c_str());
+            exit(1);
+        }
+    }
     Value* value = node->value->accept(this);
     symbols[id] = value;
+    return nullptr;
+}
+
+Value* Visitor::visit(DeclarationNode *node) {
+    std::string id = dynamic_cast<LocationNode *>(node->locationNode)->id;
+    symbols[id] = nullptr; // TODO: Create `undefined` or something
     return nullptr;
 }
 

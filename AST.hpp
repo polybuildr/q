@@ -44,7 +44,15 @@ public:
     ACCEPT_VISITOR_DECLARE
     ASTNode *locationNode;
     ASTNode *value;
-    AssignmentNode(ASTNode *location, ASTNode *val);
+    bool isAlsoDeclaration;
+    AssignmentNode(ASTNode *location, ASTNode *val, bool isAlsoDeclaration = false);
+};
+
+class DeclarationNode: public virtual ASTNode {
+public:
+    ACCEPT_VISITOR_DECLARE
+    ASTNode *locationNode;
+    DeclarationNode(ASTNode *location);
 };
 
 class PrintNode: public virtual ASTNode {
