@@ -14,6 +14,11 @@ Value* Visitor::visit(StatementsListNode *node) {
     return nullptr;
 }
 
+Value* Visitor::visit(BlockNode *node) {
+    node->statementsList->accept(this);
+    return nullptr;
+}
+
 Value* Visitor::visit(AssignmentNode *node) {
     std::string id = dynamic_cast<LocationNode *>(node->locationNode)->id;
     Value* value = node->value->accept(this);

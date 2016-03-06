@@ -29,19 +29,25 @@ StatementsListNode *program;
 %token <ival> INT_LITERAL
 %token <sval> IDENTIFIER
 
-%type <node> statements statement assignment printer expr location literal
+%type <node> statements statement assignment printer expr location literal block
 
 %left '-' '+'
 %left '*' '/'
 %left LOGICAL_OR LOGICAL_AND
 
 %%
-statements: /* empty */ { $$ = new StatementsListNode(); program = dynamic_cast<StatementsListNode *>$$; }
+PROGRAM: statements { program = dynamic_cast<StatementsListNode *>$1; }
+
+statements: /* empty */ { $$ = new StatementsListNode();  }
           | statements statement { $$ = $1; dynamic_cast<StatementsListNode *>($$)->append($2); };
 
 statement: assignment
          | printer
+         | block
          ;
+
+block: '{' statements '}' { $$ = new BlockNode($2); }
+     ;
 
 assignment: VAR location '=' expr { $$ = new AssignmentNode($2, $4); }
           ;

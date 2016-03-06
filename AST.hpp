@@ -32,6 +32,13 @@ public:
     StatementsListNode();
 };
 
+class BlockNode: public virtual ASTNode {
+public:
+    ACCEPT_VISITOR_DECLARE
+    ASTNode *statementsList;
+    BlockNode(ASTNode*);
+};
+
 class AssignmentNode: public virtual ASTNode {
 public:
     ACCEPT_VISITOR_DECLARE

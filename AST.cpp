@@ -1,7 +1,7 @@
 #include "AST.hpp"
 #include "Visitor.hpp"
 
-enum class NodeType { STATEMENTS_LIST, ASSIGNMENT, PRINT, LOCATION, BINARY_EXPR, INT_LITERAL, BOOL_LITERAL };
+enum class NodeType { STATEMENTS_LIST, BLOCK, ASSIGNMENT, PRINT, LOCATION, BINARY_EXPR, INT_LITERAL, BOOL_LITERAL };
 
 #define ACCEPT_VISITOR(CLASS) Value* CLASS::accept(Visitor *v) { return v->visit(this); }
 
@@ -14,6 +14,13 @@ StatementsListNode::StatementsListNode() {
 }
 
 ACCEPT_VISITOR(StatementsListNode)
+
+BlockNode::BlockNode(ASTNode *statementsList):
+statementsList(statementsList) {
+    nodeType = NodeType::BLOCK;
+}
+
+ACCEPT_VISITOR(BlockNode)
 
 AssignmentNode::AssignmentNode(ASTNode *location, ASTNode *val):
 locationNode(location),

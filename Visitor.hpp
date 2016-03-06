@@ -4,6 +4,7 @@
 #include <cstdio>
 
 class StatementsListNode;
+class BlockNode;
 class AssignmentNode;
 class PrintNode;
 class LocationNode;
@@ -16,6 +17,7 @@ class Value;
 class Visitor {
 public:
     Value* visit(StatementsListNode *);
+    Value* visit(BlockNode *);
     Value* visit(AssignmentNode *);
     Value* visit(PrintNode *);
     Value* visit(LocationNode *);
