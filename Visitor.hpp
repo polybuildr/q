@@ -19,7 +19,7 @@ class Value;
 
 class Visitor {
 protected:
-    std::list< std::map<std::string, Value*> > symbols;
+    std::list< std::map<std::string, std::pair<Value*, bool> > > symbols;
 public:
     Value* visit(StatementsListNode *);
     Value* visit(BlockNode *);

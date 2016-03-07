@@ -13,6 +13,7 @@ using namespace std;
 true                    { autoInsertSemicolon = true; return TRUE; }
 false                   { autoInsertSemicolon = true; return FALSE; }
 var                     { autoInsertSemicolon = false; return VAR; }
+const                   { autoInsertSemicolon = false; return CONST; }
 \&\&                    { autoInsertSemicolon = false; return LOGICAL_AND; }
 \|\|                    { autoInsertSemicolon = false; return LOGICAL_OR; }
 [[:digit:]]+            { autoInsertSemicolon = true; yylval.ival = atoi(yytext); return INT_LITERAL; }

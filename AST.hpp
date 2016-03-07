@@ -45,7 +45,8 @@ public:
     ASTNode *locationNode;
     ASTNode *value;
     bool isAlsoDeclaration;
-    AssignmentNode(ASTNode *location, ASTNode *val, bool isAlsoDeclaration = false);
+    bool isMutable;
+    AssignmentNode(ASTNode *location, ASTNode *val, bool isAlsoDeclaration = false, bool isMutable = true);
 };
 
 class DeclarationNode: public virtual ASTNode {

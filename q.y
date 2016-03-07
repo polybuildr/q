@@ -25,6 +25,7 @@ StatementsListNode *program;
 %token LOGICAL_AND
 %token LOGICAL_OR
 %token VAR
+%token CONST
 
 %token <ival> INT_LITERAL
 %token <sval> IDENTIFIER
@@ -57,6 +58,7 @@ declaration: VAR location { $$ = new DeclarationNode($2); }
 
 assignment: VAR location '=' expr { $$ = new AssignmentNode($2, $4, true); }
           | location '=' expr { $$ = new AssignmentNode($1, $3); }
+          | CONST location '=' expr { $$ = new AssignmentNode($2, $4, true, false); }
           ;
 
 location: IDENTIFIER { $$ = new LocationNode($1); }

@@ -22,9 +22,10 @@ statementsList(statementsList) {
 
 ACCEPT_VISITOR(BlockNode)
 
-AssignmentNode::AssignmentNode(ASTNode *location, ASTNode *val, bool isAlsoDeclaration):
+AssignmentNode::AssignmentNode(ASTNode *location, ASTNode *val, bool isAlsoDeclaration, bool isMutable):
 locationNode(location),
 value(val),
+isMutable(isMutable),
 isAlsoDeclaration(isAlsoDeclaration) {
     nodeType = NodeType::ASSIGNMENT;
 }

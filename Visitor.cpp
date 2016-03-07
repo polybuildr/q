@@ -7,12 +7,12 @@
 #include "Utils.cpp"
 
 Visitor::Visitor() {
-    std::map<std::string, Value*> frame;
+    std::map<std::string, std::pair<Value*, bool> > frame;
     symbols.push_back(frame);
 }
 
 Value* Visitor::visit(StatementsListNode *node) {
-    std::map<std::string, Value*> frame;
+    std::map<std::string, std::pair<Value*, bool> > frame;
     symbols.push_back(frame);
     for (ASTNode *statement : (node->list)) {
         statement->accept(this);
@@ -31,23 +31,28 @@ Value* Visitor::visit(AssignmentNode *node) {
     if (!node->isAlsoDeclaration) {
         for (auto it = symbols.rbegin(); it != symbols.rend(); ++it) {
             if ((*it).find(id) != (*it).end()) {
+                if (((*it)[id]).second == false) {
+                    printf("error: read-only variable '%s' is not assignable, exiting\n", id.c_str());
+                    exit(1);
+                }
                 Value* value = node->value->accept(this);
-                (*it)[id] = value;
+                (*it)[id] = std::make_pair(value, true);
                 return nullptr;
             }
         }
         printf("error: use of undeclared identifier '%s', exiting\n", id.c_str());
         exit(1);
     } else {
+        bool isMutable = node->isMutable;
         Value* value = node->value->accept(this);
-        symbols.back()[id] = value;
+        symbols.back()[id] = std::make_pair(value, isMutable);
     }
     return nullptr;
 }
 
 Value* Visitor::visit(DeclarationNode *node) {
     std::string id = dynamic_cast<LocationNode *>(node->locationNode)->id;
-    symbols.back()[id] = nullptr; // TODO: Create `undefined` or something
+    symbols.back()[id] = std::make_pair(nullptr, true); // TODO: Create `undefined` or something
     return nullptr;
 }
 
@@ -60,7 +65,7 @@ Value* Visitor::visit(PrintNode *node) {
 Value* Visitor::visit(LocationNode *node) {
     for (auto it = symbols.rbegin(); it != symbols.rend(); ++it) {
         if ((*it).find(node->id) != (*it).end()) {
-            Value* value = (*it)[node->id];
+            Value* value = (*it)[node->id].first;
             if (value == nullptr) {
                 printf("error: use of unitialised identifier '%s', exiting\n", node->id.c_str());
                 exit(1);
