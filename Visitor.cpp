@@ -60,7 +60,12 @@ Value* Visitor::visit(PrintNode *node) {
 Value* Visitor::visit(LocationNode *node) {
     for (auto it = symbols.rbegin(); it != symbols.rend(); ++it) {
         if ((*it).find(node->id) != (*it).end()) {
-            return (*it)[node->id];
+            Value* value = (*it)[node->id];
+            if (value == nullptr) {
+                printf("error: use of unitialised identifier '%s', exiting\n", node->id.c_str());
+                exit(1);
+            }
+            return value;
         }
     }
     printf("error: use of undeclared identifier '%s', exiting\n", node->id.c_str());
