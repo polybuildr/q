@@ -39,11 +39,13 @@ StatementsListNode *program;
 PROGRAM: statements { program = dynamic_cast<StatementsListNode *>$1; }
 
 statements: /* empty */ { $$ = new StatementsListNode();  }
-          | statements statement { $$ = $1; dynamic_cast<StatementsListNode *>($$)->append($2); };
+          | statements statement { $$ = $1; dynamic_cast<StatementsListNode *>($$)->append($2); }
+          | statements ';' { $$ = $1; }
+          ;
 
-statement: assignment
-         | declaration
-         | printer
+statement: assignment ';'
+         | declaration ';'
+         | printer ';'
          | block
          ;
 
