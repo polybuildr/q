@@ -16,6 +16,7 @@ StatementsListNode *program;
 
 %union {
     int ival;
+    float fval;
     char *sval;
     ASTNode *node;
 }
@@ -28,6 +29,7 @@ StatementsListNode *program;
 %token CONST
 
 %token <ival> INT_LITERAL
+%token <fval> FLOAT_LITERAL
 %token <sval> IDENTIFIER
 
 %type <node> statements statement assignment declaration printer expr location literal block
@@ -78,6 +80,7 @@ expr: literal { $$ = $1; }
     ;
 
 literal: INT_LITERAL { $$ = new IntLiteralNode($1); }
+       | FLOAT_LITERAL { $$ = new FloatLiteralNode($1); }
        | TRUE { $$ = new BoolLiteralNode(true); }
        | FALSE { $$ = new BoolLiteralNode(false); }
        ;

@@ -90,6 +90,14 @@ public:
     IntLiteralNode(int value);
 };
 
+class FloatLiteralNode: public virtual ASTNode {
+public:
+    ACCEPT_VISITOR_DECLARE
+
+    float value;
+    FloatLiteralNode(float value);
+};
+
 class BoolLiteralNode: public virtual ASTNode {
 public:
     ACCEPT_VISITOR_DECLARE

@@ -9,11 +9,24 @@ ValueType Value::getType() {
 Integer::Integer(int value): value(value) {
     type = ValueType::INT;
 }
+
 void Integer::print() {
     printf("%d\n", value);
 }
 
 int Integer::getValue() {
+    return value;
+}
+
+RealNumber::RealNumber(float value): value(value) {
+    type = ValueType::REAL;
+}
+
+void RealNumber::print() {
+    printf("%g\n", value);
+}
+
+float RealNumber::getValue() {
     return value;
 }
 

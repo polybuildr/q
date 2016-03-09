@@ -89,6 +89,10 @@ Value* Visitor::visit(IntLiteralNode *node) {
     return new Integer(node->value);
 }
 
+Value* Visitor::visit(FloatLiteralNode *node) {
+    return new RealNumber(node->value);
+}
+
 Value* Visitor::visit(BoolLiteralNode *node) {
     return new Boolean(node->value);
 }

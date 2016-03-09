@@ -16,7 +16,8 @@ var                     { autoInsertSemicolon = false; return VAR; }
 const                   { autoInsertSemicolon = false; return CONST; }
 \&\&                    { autoInsertSemicolon = false; return LOGICAL_AND; }
 \|\|                    { autoInsertSemicolon = false; return LOGICAL_OR; }
-[[:digit:]]+            { autoInsertSemicolon = true; yylval.ival = atoi(yytext); return INT_LITERAL; }
+[0-9]+                  { autoInsertSemicolon = true; yylval.ival = atoi(yytext); return INT_LITERAL; }
+[0-9]*\.[0-9]+          { autoInsertSemicolon = true; yylval.fval = atof(yytext); return FLOAT_LITERAL; }
 [@+\-*/={};]            { autoInsertSemicolon = false; return yytext[0]; }
 [[:alpha:]][[:alnum:]]* { autoInsertSemicolon = true; yylval.sval = strdup(yytext); return IDENTIFIER; }
 [\t ]                   { /* ignore */ }
