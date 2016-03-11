@@ -14,7 +14,22 @@ namespace Operations {
     }
 
     bool getBoolValue(Value *value) {
-        return dynamic_cast<Boolean *>(value)->getValue();
+        Boolean *b = dynamic_cast<Boolean *>(value);
+        if (b) {
+            return b->getValue();
+        }
+
+        Integer *i = dynamic_cast<Integer *>(value);
+        if (i) {
+            return i->getValue() != 0;
+        }
+
+        RealNumber *r = dynamic_cast<RealNumber *>(value);
+        if (r) {
+            return r->getValue() != 0.0;
+        }
+        printf("error: unexpected fatal error, exiting\n");
+        exit(1);
     }
 
     Value* add(Value* val1, Value* val2) {
@@ -93,23 +108,11 @@ namespace Operations {
     }
 
     Value* logicalAnd(Value* val1, Value* val2) {
-        switch (TYPE_PAIR(val1->getType(), val2->getType())) {
-            case TYPE_PAIR(ValueType::BOOL, ValueType::BOOL):
-                return new Boolean(getBoolValue(val1) && getBoolValue(val2));
-            default:
-                printf("error: unsupported operand type(s) for &&\n");
-                exit(1);
-        }
+        return new Boolean(getBoolValue(val1) && getBoolValue(val2));
     }
 
     Value* logicalOr(Value* val1, Value* val2) {
-        switch (TYPE_PAIR(val1->getType(), val2->getType())) {
-            case TYPE_PAIR(ValueType::BOOL, ValueType::BOOL):
-                return new Boolean(getBoolValue(val1) || getBoolValue(val2));
-            default:
-                printf("error: unsupported operand type(s) for ||\n");
-                exit(1);
-        }
+        return new Boolean(getBoolValue(val1) || getBoolValue(val2));
     }
 
     Value* performBinary(Value* value1, std::string op, Value* value2) {
