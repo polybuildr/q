@@ -107,6 +107,40 @@ namespace Operations {
         return nullptr;
     }
 
+    Value* lessThan(Value* val1, Value* val2) {
+        switch (TYPE_PAIR(val1->getType(), val2->getType())) {
+            case TYPE_PAIR(ValueType::INT, ValueType::INT):
+                return new Boolean(getIntValue(val1) < getIntValue(val2));
+            case TYPE_PAIR(ValueType::REAL, ValueType::INT):
+                return new Boolean(getFloatValue(val1) < static_cast<float>(getIntValue(val2)));
+            case TYPE_PAIR(ValueType::INT, ValueType::REAL):
+                return new Boolean(static_cast<float>(getIntValue(val1)) < getFloatValue(val2));
+            case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
+                return new Boolean(getFloatValue(val1) < getFloatValue(val2));
+            default:
+                printf("error: unsupported operand type(s) for <\n");
+                exit(1);
+        }
+        return nullptr;
+    }
+
+    Value* greaterThan(Value* val1, Value* val2) {
+        switch (TYPE_PAIR(val1->getType(), val2->getType())) {
+            case TYPE_PAIR(ValueType::INT, ValueType::INT):
+                return new Boolean(getIntValue(val1) > getIntValue(val2));
+            case TYPE_PAIR(ValueType::REAL, ValueType::INT):
+                return new Boolean(getFloatValue(val1) > static_cast<float>(getIntValue(val2)));
+            case TYPE_PAIR(ValueType::INT, ValueType::REAL):
+                return new Boolean(static_cast<float>(getIntValue(val1)) > getFloatValue(val2));
+            case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
+                return new Boolean(getFloatValue(val1) > getFloatValue(val2));
+            default:
+                printf("error: unsupported operand type(s) for >\n");
+                exit(1);
+        }
+        return nullptr;
+    }
+
     Value* logicalAnd(Value* val1, Value* val2) {
         return new Boolean(getBoolValue(val1) && getBoolValue(val2));
     }
@@ -116,15 +150,21 @@ namespace Operations {
     }
 
     Value* performBinary(Value* value1, std::string op, Value* value2) {
-            switch (op[0]) {
-                case '+':
-                    return Operations::add(value1, value2);
-                case '-':
-                    return Operations::sub(value1, value2);
-                case '*':
-                    return Operations::mul(value1, value2);
-                case '/':
-                    return Operations::div(value1, value2);
+            if (op.length() == 1) {
+                switch (op[0]) {
+                    case '+':
+                        return Operations::add(value1, value2);
+                    case '-':
+                        return Operations::sub(value1, value2);
+                    case '*':
+                        return Operations::mul(value1, value2);
+                    case '/':
+                        return Operations::div(value1, value2);
+                    case '>':
+                        return Operations::greaterThan(value1, value2);
+                    case '<':
+                        return Operations::lessThan(value1, value2);
+                }
             }
             if (op == "&&") {
                 return Operations::logicalAnd(value1, value2);

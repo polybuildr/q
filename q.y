@@ -36,6 +36,7 @@ StatementsListNode *program;
 
 %type <node> statements statement assignment declaration printer expr location literal block
 
+%left '<' '>'
 %left '-' '+'
 %left '*' '/'
 %left LOGICAL_OR LOGICAL_AND
@@ -82,6 +83,8 @@ expr: literal { $$ = $1; }
     | expr '-' expr { $$ = new BinaryExpressionNode($1, "-", $3); }
     | expr '*' expr { $$ = new BinaryExpressionNode($1, "*", $3); }
     | expr '/' expr { $$ = new BinaryExpressionNode($1, "/", $3); }
+    | expr '<' expr { $$ = new BinaryExpressionNode($1, "<", $3); }
+    | expr '>' expr { $$ = new BinaryExpressionNode($1, ">", $3); }
     | expr LOGICAL_AND expr { $$ = new BinaryExpressionNode($1, "&&", $3); }
     | expr LOGICAL_OR expr { $$ = new BinaryExpressionNode($1, "||", $3); }
     ;
