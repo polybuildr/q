@@ -27,6 +27,7 @@ StatementsListNode *program;
 %token LOGICAL_OR
 %token VAR
 %token CONST
+%token IF
 
 %token <ival> INT_LITERAL
 %token <fval> FLOAT_LITERAL
@@ -50,6 +51,7 @@ statement: assignment ';'
          | declaration ';'
          | printer ';'
          | block
+         | IF '(' expr ')' block { $$ = new IfNode($3, $5); }
          ;
 
 block: '{' statements '}' { $$ = new BlockNode($2); }

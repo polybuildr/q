@@ -11,7 +11,8 @@ enum class NodeType {
     BINARY_EXPR,
     INT_LITERAL,
     FLOAT_LITERAL,
-    BOOL_LITERAL
+    BOOL_LITERAL,
+    IF
 };
 
 #define ACCEPT_VISITOR(CLASS) Value* CLASS::accept(Visitor *v) { return v->visit(this); }
@@ -93,3 +94,11 @@ value(value) {
 }
 
 ACCEPT_VISITOR(BoolLiteralNode)
+
+IfNode::IfNode(ASTNode* condition, ASTNode *block):
+condition(condition),
+block(block) {
+    nodeType = NodeType::IF;
+};
+
+ACCEPT_VISITOR(IfNode)

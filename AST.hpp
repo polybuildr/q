@@ -106,4 +106,12 @@ public:
     BoolLiteralNode(bool value);
 };
 
+class IfNode: public virtual ASTNode {
+public:
+    ACCEPT_VISITOR_DECLARE
+
+    ASTNode *condition, *block;
+    IfNode(ASTNode *condition, ASTNode *block);
+};
+
 #endif

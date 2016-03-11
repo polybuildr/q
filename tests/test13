@@ -1,0 +1,14 @@
+var x = true
+if (x) {
+    @ x
+}
+
+var y = 0
+if (y) {
+    @ y
+}
+
+var z = 5/2 - 2.0
+if (z) {
+    @ z
+}

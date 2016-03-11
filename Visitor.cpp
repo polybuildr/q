@@ -96,3 +96,11 @@ Value* Visitor::visit(FloatLiteralNode *node) {
 Value* Visitor::visit(BoolLiteralNode *node) {
     return new Boolean(node->value);
 }
+
+Value* Visitor::visit(IfNode *node) {
+    Value *expr = node->condition->accept(this);
+    if (Operations::getBoolValue(expr)) {
+        node->block->accept(this);
+    }
+    return nullptr;
+}

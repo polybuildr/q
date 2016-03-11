@@ -15,6 +15,7 @@ class BinaryExpressionNode;
 class IntLiteralNode;
 class FloatLiteralNode;
 class BoolLiteralNode;
+class IfNode;
 
 class Value;
 
@@ -32,6 +33,7 @@ public:
     Value* visit(IntLiteralNode *);
     Value* visit(FloatLiteralNode *);
     Value* visit(BoolLiteralNode *);
+    Value* visit(IfNode *);
     Visitor();
 };
 
