@@ -110,8 +110,8 @@ class IfNode: public virtual ASTNode {
 public:
     ACCEPT_VISITOR_DECLARE
 
-    ASTNode *condition, *block;
-    IfNode(ASTNode *condition, ASTNode *block);
+    ASTNode *condition, *thenBlock, *elseBlock;
+    IfNode(ASTNode *condition, ASTNode *thenBlock, ASTNode *elseBlock = nullptr);
 };
 
 #endif

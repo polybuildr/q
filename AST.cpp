@@ -95,9 +95,10 @@ value(value) {
 
 ACCEPT_VISITOR(BoolLiteralNode)
 
-IfNode::IfNode(ASTNode* condition, ASTNode *block):
+IfNode::IfNode(ASTNode* condition, ASTNode *thenBlock, ASTNode *elseBlock):
 condition(condition),
-block(block) {
+thenBlock(thenBlock),
+elseBlock(elseBlock) {
     nodeType = NodeType::IF;
 };
 

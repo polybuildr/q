@@ -100,7 +100,9 @@ Value* Visitor::visit(BoolLiteralNode *node) {
 Value* Visitor::visit(IfNode *node) {
     Value *expr = node->condition->accept(this);
     if (Operations::getBoolValue(expr)) {
-        node->block->accept(this);
+        node->thenBlock->accept(this);
+    } else if (node->elseBlock) {
+        node->elseBlock->accept(this);
     }
     return nullptr;
 }

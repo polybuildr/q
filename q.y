@@ -39,6 +39,8 @@ StatementsListNode *program;
 %left '*' '/'
 %left LOGICAL_OR LOGICAL_AND
 
+%right "then" ELSE
+
 %%
 PROGRAM: statements { program = dynamic_cast<StatementsListNode *>$1; }
 
@@ -51,7 +53,8 @@ statement: assignment ';'
          | declaration ';'
          | printer ';'
          | block
-         | IF '(' expr ')' block { $$ = new IfNode($3, $5); }
+         | IF '(' expr ')' statement { $$ = new IfNode($3, $5); } %prec "then"
+         | IF '(' expr ')' statement ELSE statement { $$ = new IfNode($3, $5, $7); }
          ;
 
 block: '{' statements '}' { $$ = new BlockNode($2); }
