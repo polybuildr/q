@@ -16,6 +16,7 @@ class IntLiteralNode;
 class FloatLiteralNode;
 class BoolLiteralNode;
 class IfNode;
+class ForLoopNode;
 
 class Value;
 
@@ -34,7 +35,10 @@ public:
     Value* visit(FloatLiteralNode *);
     Value* visit(BoolLiteralNode *);
     Value* visit(IfNode *);
+    Value* visit(ForLoopNode *);
     Visitor();
+    void pushNewSymbolFrame();
+    void popSymbolFrame();
 };
 
 #endif

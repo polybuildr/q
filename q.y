@@ -28,6 +28,7 @@ StatementsListNode *program;
 %token VAR
 %token CONST
 %token IF
+%token FOR
 
 %token <ival> INT_LITERAL
 %token <fval> FLOAT_LITERAL
@@ -55,6 +56,7 @@ statement: assignment ';'
          | block
          | IF '(' expr ')' statement { $$ = new IfNode($3, $5); } %prec "then"
          | IF '(' expr ')' statement ELSE statement { $$ = new IfNode($3, $5, $7); }
+         | FOR '(' statement expr ';' statement ')' statement { $$ = new ForLoopNode($3, $4, $6, $8); }
          ;
 
 block: '{' statements '}' { $$ = new BlockNode($2); }

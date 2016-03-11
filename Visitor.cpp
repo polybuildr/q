@@ -6,18 +6,25 @@
 #include "Value.hpp"
 #include "Utils.cpp"
 
-Visitor::Visitor() {
+void Visitor::pushNewSymbolFrame() {
     std::map<std::string, std::pair<Value*, bool> > frame;
     symbols.push_back(frame);
 }
 
+void Visitor::popSymbolFrame() {
+    symbols.pop_back();
+}
+
+Visitor::Visitor() {
+    pushNewSymbolFrame();
+}
+
 Value* Visitor::visit(StatementsListNode *node) {
-    std::map<std::string, std::pair<Value*, bool> > frame;
-    symbols.push_back(frame);
+    pushNewSymbolFrame();
     for (ASTNode *statement : (node->list)) {
         statement->accept(this);
     }
-    symbols.pop_back();
+    popSymbolFrame();
     return nullptr;
 }
 
@@ -104,5 +111,18 @@ Value* Visitor::visit(IfNode *node) {
     } else if (node->elseBlock) {
         node->elseBlock->accept(this);
     }
+    return nullptr;
+}
+
+Value* Visitor::visit(ForLoopNode *node) {
+    pushNewSymbolFrame();
+    node->init->accept(this);
+    Value* condition = node->condition->accept(this);
+    while (Operations::getBoolValue(condition)) {
+        node->body->accept(this);
+        node->increment->accept(this);
+        condition = node->condition->accept(this);
+    }
+    popSymbolFrame();
     return nullptr;
 }

@@ -12,7 +12,8 @@ enum class NodeType {
     INT_LITERAL,
     FLOAT_LITERAL,
     BOOL_LITERAL,
-    IF
+    IF,
+    FOR
 };
 
 #define ACCEPT_VISITOR(CLASS) Value* CLASS::accept(Visitor *v) { return v->visit(this); }
@@ -103,3 +104,13 @@ elseBlock(elseBlock) {
 };
 
 ACCEPT_VISITOR(IfNode)
+
+ForLoopNode::ForLoopNode(ASTNode *init, ASTNode *condition, ASTNode *increment, ASTNode *body):
+init(init),
+condition(condition),
+increment(increment),
+body(body) {
+    nodeType = NodeType::FOR;
+}
+
+ACCEPT_VISITOR(ForLoopNode)

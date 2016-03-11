@@ -114,4 +114,12 @@ public:
     IfNode(ASTNode *condition, ASTNode *thenBlock, ASTNode *elseBlock = nullptr);
 };
 
+class ForLoopNode: public virtual ASTNode {
+public:
+    ACCEPT_VISITOR_DECLARE
+
+    ASTNode *init, *condition, *increment, *body;
+    ForLoopNode(ASTNode *init, ASTNode *condition, ASTNode *increment, ASTNode *body);
+};
+
 #endif
