@@ -34,7 +34,7 @@ StatementsListNode *program;
 %token <fval> FLOAT_LITERAL
 %token <sval> IDENTIFIER
 
-%type <node> statements statement assignment declaration printer expr location literal block
+%type <node> statements statement statementElem assignment declaration printer expr location literal block
 
 %left '<' '>'
 %left '-' '+'
@@ -51,14 +51,17 @@ statements: /* empty */ { $$ = new StatementsListNode();  }
           | statements ';' { $$ = $1; }
           ;
 
-statement: assignment ';'
-         | declaration ';'
-         | printer ';'
-         | block
+statement: statementElem ';' 
+         | block 
          | IF '(' expr ')' statement { $$ = new IfNode($3, $5); } %prec "then"
          | IF '(' expr ')' statement ELSE statement { $$ = new IfNode($3, $5, $7); }
-         | FOR '(' statement expr ';' statement ')' statement { $$ = new ForLoopNode($3, $4, $6, $8); }
+         | FOR '(' statementElem ';' expr ';' statementElem ')' statement { $$ = new ForLoopNode($3, $5, $7, $9); }
          ;
+
+statementElem: assignment 
+       | declaration
+       | printer 
+       ;
 
 block: '{' statements '}' { $$ = new BlockNode($2); }
      ;
