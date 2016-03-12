@@ -94,7 +94,7 @@ std::shared_ptr<Value> Visitor::visit(BinaryExpressionNode *node) {
 }
 
 std::shared_ptr<Value> Visitor::visit(IntLiteralNode *node) {
-    return std::shared_ptr<Value>(new Integer(node->value));
+    return std::make_shared<Integer>(node->value);
 }
 
 std::shared_ptr<Value> Visitor::visit(FloatLiteralNode *node) {

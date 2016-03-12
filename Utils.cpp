@@ -15,17 +15,17 @@ namespace Operations {
     }
 
     bool getBoolValue(std::shared_ptr<Value> value) {
-        std::shared_ptr<Boolean> b(std::dynamic_pointer_cast<Boolean>(value));
+        std::shared_ptr<Boolean> b = std::dynamic_pointer_cast<Boolean>(value);
         if (b) {
             return b->getValue();
         }
 
-        std::shared_ptr<Integer> i(std::dynamic_pointer_cast<Integer>(value));
+        std::shared_ptr<Integer> i = std::dynamic_pointer_cast<Integer>(value);
         if (i) {
             return i->getValue() != 0;
         }
 
-        std::shared_ptr<RealNumber> r(std::dynamic_pointer_cast<RealNumber>(value));
+        std::shared_ptr<RealNumber> r = std::dynamic_pointer_cast<RealNumber>(value);
         if (r) {
             return r->getValue() != 0.0;
         }
@@ -36,13 +36,13 @@ namespace Operations {
     std::shared_ptr<Value> add(std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
         switch (TYPE_PAIR(val1->getType(), val2->getType())) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
-                return std::shared_ptr<Integer>(new Integer(getIntValue(val1) + getIntValue(val2)));
+                return std::make_shared<Integer>(getIntValue(val1) + getIntValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return std::shared_ptr<RealNumber>(new RealNumber(getFloatValue(val1) + static_cast<float>(getIntValue(val2))));
+                return std::make_shared<RealNumber>(getFloatValue(val1) + static_cast<float>(getIntValue(val2)));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return std::shared_ptr<RealNumber>(new RealNumber(static_cast<float>(getIntValue(val1)) + getFloatValue(val2)));
+                return std::make_shared<RealNumber>(static_cast<float>(getIntValue(val1)) + getFloatValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
-                return std::shared_ptr<RealNumber>(new RealNumber(getFloatValue(val1) + getFloatValue(val2)));
+                return std::make_shared<RealNumber>(getFloatValue(val1) + getFloatValue(val2));
             default:
                 printf("error: unsupported operand type(s) for +\n");
                 exit(1);
@@ -53,13 +53,13 @@ namespace Operations {
     std::shared_ptr<Value> sub(std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
         switch (TYPE_PAIR(val1->getType(), val2->getType())) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
-                return std::shared_ptr<Integer>(new Integer(getIntValue(val1) - getIntValue(val2)));
+                return std::make_shared<Integer>(getIntValue(val1) - getIntValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return std::shared_ptr<RealNumber>(new RealNumber(getFloatValue(val1) - static_cast<float>(getIntValue(val2))));
+                return std::make_shared<RealNumber>(getFloatValue(val1) - static_cast<float>(getIntValue(val2)));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return std::shared_ptr<RealNumber>(new RealNumber(static_cast<float>(getIntValue(val1)) - getFloatValue(val2)));
+                return std::make_shared<RealNumber>(static_cast<float>(getIntValue(val1)) - getFloatValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
-                return std::shared_ptr<RealNumber>(new RealNumber(getFloatValue(val1) - getFloatValue(val2)));
+                return std::make_shared<RealNumber>(getFloatValue(val1) - getFloatValue(val2));
             default:
                 printf("error: unsupported operand type(s) for -\n");
                 exit(1);
@@ -70,13 +70,13 @@ namespace Operations {
     std::shared_ptr<Value> mul(std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
         switch (TYPE_PAIR(val1->getType(), val2->getType())) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
-                return std::shared_ptr<Integer>(new Integer(getIntValue(val1) * getIntValue(val2)));
+                return std::make_shared<Integer>(getIntValue(val1) * getIntValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return std::shared_ptr<RealNumber>(new RealNumber(getFloatValue(val1) * static_cast<float>(getIntValue(val2))));
+                return std::make_shared<RealNumber>(getFloatValue(val1) * static_cast<float>(getIntValue(val2)));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return std::shared_ptr<RealNumber>(new RealNumber(static_cast<float>(getIntValue(val1)) * getFloatValue(val2)));
+                return std::make_shared<RealNumber>(static_cast<float>(getIntValue(val1)) * getFloatValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
-                return std::shared_ptr<RealNumber>(new RealNumber(getFloatValue(val1) * getFloatValue(val2)));
+                return std::make_shared<RealNumber>(getFloatValue(val1) * getFloatValue(val2));
             default:
                 printf("error: unsupported operand type(s) for *\n");
                 exit(1);
@@ -91,16 +91,16 @@ namespace Operations {
                 a = getIntValue(val1);
                 b = getIntValue(val2);
                 if (a % b == 0) {
-                    return std::shared_ptr<Integer>(new Integer(a / b));
+                    return std::make_shared<Integer>(a / b);
                 } else {
-                    return std::shared_ptr<RealNumber>(new RealNumber(static_cast<float>(a) / b));
+                    return std::make_shared<RealNumber>(static_cast<float>(a) / b);
                 }
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return std::shared_ptr<RealNumber>(new RealNumber(getFloatValue(val1) / static_cast<float>(getIntValue(val2))));
+                return std::make_shared<RealNumber>(getFloatValue(val1) / static_cast<float>(getIntValue(val2)));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return std::shared_ptr<RealNumber>(new RealNumber(static_cast<float>(getIntValue(val1)) / getFloatValue(val2)));
+                return std::make_shared<RealNumber>(static_cast<float>(getIntValue(val1)) / getFloatValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
-                return std::shared_ptr<RealNumber>(new RealNumber(getFloatValue(val1) / getFloatValue(val2)));
+                return std::make_shared<RealNumber>(getFloatValue(val1) / getFloatValue(val2));
             default:
                 printf("error: unsupported operand type(s) for /\n");
                 exit(1);
@@ -111,13 +111,13 @@ namespace Operations {
     std::shared_ptr<Value> lessThan(std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
         switch (TYPE_PAIR(val1->getType(), val2->getType())) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
-                return std::shared_ptr<Boolean>(new Boolean(getIntValue(val1) < getIntValue(val2)));
+                return std::make_shared<Boolean>(getIntValue(val1) < getIntValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return std::shared_ptr<Boolean>(new Boolean(getFloatValue(val1) < static_cast<float>(getIntValue(val2))));
+                return std::make_shared<Boolean>(getFloatValue(val1) < static_cast<float>(getIntValue(val2)));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return std::shared_ptr<Boolean>(new Boolean(static_cast<float>(getIntValue(val1)) < getFloatValue(val2)));
+                return std::make_shared<Boolean>(static_cast<float>(getIntValue(val1)) < getFloatValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
-                return std::shared_ptr<Boolean>(new Boolean(getFloatValue(val1) < getFloatValue(val2)));
+                return std::make_shared<Boolean>(getFloatValue(val1) < getFloatValue(val2));
             default:
                 printf("error: unsupported operand type(s) for <\n");
                 exit(1);
@@ -128,13 +128,13 @@ namespace Operations {
     std::shared_ptr<Value> greaterThan(std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
         switch (TYPE_PAIR(val1->getType(), val2->getType())) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
-                return std::shared_ptr<Boolean>(new Boolean(getIntValue(val1) > getIntValue(val2)));
+                return std::make_shared<Boolean>(getIntValue(val1) > getIntValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return std::shared_ptr<Boolean>(new Boolean(getFloatValue(val1) > static_cast<float>(getIntValue(val2))));
+                return std::make_shared<Boolean>(getFloatValue(val1) > static_cast<float>(getIntValue(val2)));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return std::shared_ptr<Boolean>(new Boolean(static_cast<float>(getIntValue(val1)) > getFloatValue(val2)));
+                return std::make_shared<Boolean>(static_cast<float>(getIntValue(val1)) > getFloatValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
-                return std::shared_ptr<Boolean>(new Boolean(getFloatValue(val1) > getFloatValue(val2)));
+                return std::make_shared<Boolean>(getFloatValue(val1) > getFloatValue(val2));
             default:
                 printf("error: unsupported operand type(s) for >\n");
                 exit(1);
@@ -143,11 +143,11 @@ namespace Operations {
     }
 
     std::shared_ptr<Value> logicalAnd(std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
-        return std::shared_ptr<Boolean>(new Boolean(getBoolValue(val1) && getBoolValue(val2)));
+        return std::make_shared<Boolean>(getBoolValue(val1) && getBoolValue(val2));
     }
 
     std::shared_ptr<Value> logicalOr(std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
-        return std::shared_ptr<Boolean>(new Boolean(getBoolValue(val1) || getBoolValue(val2)));
+        return std::make_shared<Boolean>(getBoolValue(val1) || getBoolValue(val2));
     }
 
     std::shared_ptr<Value> performBinary(std::shared_ptr<Value> value1, std::string op, std::shared_ptr<Value> value2) {
