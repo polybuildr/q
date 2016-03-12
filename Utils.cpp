@@ -1,30 +1,31 @@
 #include <string>
+#include <memory>
 
 #include "Value.hpp"
 
 #define TYPE_PAIR(t1,t2) ((static_cast<int>(t1) << 4) | static_cast<int>(t2))
 
 namespace Operations {
-    int getIntValue(Value* value) {
-        return dynamic_cast<Integer *>(value)->getValue();
+    int getIntValue(std::shared_ptr<Value> value) {
+        return std::dynamic_pointer_cast<Integer>(value)->getValue();
     }
 
-    float getFloatValue(Value* value) {
-        return dynamic_cast<RealNumber *>(value)->getValue();
+    float getFloatValue(std::shared_ptr<Value> value) {
+        return std::dynamic_pointer_cast<RealNumber>(value)->getValue();
     }
 
-    bool getBoolValue(Value *value) {
-        Boolean *b = dynamic_cast<Boolean *>(value);
+    bool getBoolValue(std::shared_ptr<Value> value) {
+        std::shared_ptr<Boolean> b(std::dynamic_pointer_cast<Boolean>(value));
         if (b) {
             return b->getValue();
         }
 
-        Integer *i = dynamic_cast<Integer *>(value);
+        std::shared_ptr<Integer> i(std::dynamic_pointer_cast<Integer>(value));
         if (i) {
             return i->getValue() != 0;
         }
 
-        RealNumber *r = dynamic_cast<RealNumber *>(value);
+        std::shared_ptr<RealNumber> r(std::dynamic_pointer_cast<RealNumber>(value));
         if (r) {
             return r->getValue() != 0.0;
         }
@@ -32,16 +33,16 @@ namespace Operations {
         exit(1);
     }
 
-    Value* add(Value* val1, Value* val2) {
+    std::shared_ptr<Value> add(std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
         switch (TYPE_PAIR(val1->getType(), val2->getType())) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
-                return new Integer(getIntValue(val1) + getIntValue(val2));
+                return std::shared_ptr<Integer>(new Integer(getIntValue(val1) + getIntValue(val2)));
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return new RealNumber(getFloatValue(val1) + static_cast<float>(getIntValue(val2)));
+                return std::shared_ptr<RealNumber>(new RealNumber(getFloatValue(val1) + static_cast<float>(getIntValue(val2))));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return new RealNumber(static_cast<float>(getIntValue(val1)) + getFloatValue(val2));
+                return std::shared_ptr<RealNumber>(new RealNumber(static_cast<float>(getIntValue(val1)) + getFloatValue(val2)));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
-                return new RealNumber(getFloatValue(val1) + getFloatValue(val2));
+                return std::shared_ptr<RealNumber>(new RealNumber(getFloatValue(val1) + getFloatValue(val2)));
             default:
                 printf("error: unsupported operand type(s) for +\n");
                 exit(1);
@@ -49,16 +50,16 @@ namespace Operations {
         return nullptr;
     }
 
-    Value* sub(Value* val1, Value* val2) {
+    std::shared_ptr<Value> sub(std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
         switch (TYPE_PAIR(val1->getType(), val2->getType())) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
-                return new Integer(getIntValue(val1) - getIntValue(val2));
+                return std::shared_ptr<Integer>(new Integer(getIntValue(val1) - getIntValue(val2)));
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return new RealNumber(getFloatValue(val1) - static_cast<float>(getIntValue(val2)));
+                return std::shared_ptr<RealNumber>(new RealNumber(getFloatValue(val1) - static_cast<float>(getIntValue(val2))));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return new RealNumber(static_cast<float>(getIntValue(val1)) - getFloatValue(val2));
+                return std::shared_ptr<RealNumber>(new RealNumber(static_cast<float>(getIntValue(val1)) - getFloatValue(val2)));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
-                return new RealNumber(getFloatValue(val1) - getFloatValue(val2));
+                return std::shared_ptr<RealNumber>(new RealNumber(getFloatValue(val1) - getFloatValue(val2)));
             default:
                 printf("error: unsupported operand type(s) for -\n");
                 exit(1);
@@ -66,16 +67,16 @@ namespace Operations {
         return nullptr;
     }
 
-    Value* mul(Value* val1, Value* val2) {
+    std::shared_ptr<Value> mul(std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
         switch (TYPE_PAIR(val1->getType(), val2->getType())) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
-                return new Integer(getIntValue(val1) * getIntValue(val2));
+                return std::shared_ptr<Integer>(new Integer(getIntValue(val1) * getIntValue(val2)));
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return new RealNumber(getFloatValue(val1) * static_cast<float>(getIntValue(val2)));
+                return std::shared_ptr<RealNumber>(new RealNumber(getFloatValue(val1) * static_cast<float>(getIntValue(val2))));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return new RealNumber(static_cast<float>(getIntValue(val1)) * getFloatValue(val2));
+                return std::shared_ptr<RealNumber>(new RealNumber(static_cast<float>(getIntValue(val1)) * getFloatValue(val2)));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
-                return new RealNumber(getFloatValue(val1) * getFloatValue(val2));
+                return std::shared_ptr<RealNumber>(new RealNumber(getFloatValue(val1) * getFloatValue(val2)));
             default:
                 printf("error: unsupported operand type(s) for *\n");
                 exit(1);
@@ -83,23 +84,23 @@ namespace Operations {
         return nullptr;
     }
 
-    Value* div(Value* val1, Value* val2) {
+    std::shared_ptr<Value> div(std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
         int a, b;
         switch (TYPE_PAIR(val1->getType(), val2->getType())) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
                 a = getIntValue(val1);
                 b = getIntValue(val2);
                 if (a % b == 0) {
-                    return new Integer(a / b);
+                    return std::shared_ptr<Integer>(new Integer(a / b));
                 } else {
-                    return new RealNumber(static_cast<float>(a) / b);
+                    return std::shared_ptr<RealNumber>(new RealNumber(static_cast<float>(a) / b));
                 }
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return new RealNumber(getFloatValue(val1) / static_cast<float>(getIntValue(val2)));
+                return std::shared_ptr<RealNumber>(new RealNumber(getFloatValue(val1) / static_cast<float>(getIntValue(val2))));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return new RealNumber(static_cast<float>(getIntValue(val1)) / getFloatValue(val2));
+                return std::shared_ptr<RealNumber>(new RealNumber(static_cast<float>(getIntValue(val1)) / getFloatValue(val2)));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
-                return new RealNumber(getFloatValue(val1) / getFloatValue(val2));
+                return std::shared_ptr<RealNumber>(new RealNumber(getFloatValue(val1) / getFloatValue(val2)));
             default:
                 printf("error: unsupported operand type(s) for /\n");
                 exit(1);
@@ -107,16 +108,16 @@ namespace Operations {
         return nullptr;
     }
 
-    Value* lessThan(Value* val1, Value* val2) {
+    std::shared_ptr<Value> lessThan(std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
         switch (TYPE_PAIR(val1->getType(), val2->getType())) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
-                return new Boolean(getIntValue(val1) < getIntValue(val2));
+                return std::shared_ptr<Boolean>(new Boolean(getIntValue(val1) < getIntValue(val2)));
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return new Boolean(getFloatValue(val1) < static_cast<float>(getIntValue(val2)));
+                return std::shared_ptr<Boolean>(new Boolean(getFloatValue(val1) < static_cast<float>(getIntValue(val2))));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return new Boolean(static_cast<float>(getIntValue(val1)) < getFloatValue(val2));
+                return std::shared_ptr<Boolean>(new Boolean(static_cast<float>(getIntValue(val1)) < getFloatValue(val2)));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
-                return new Boolean(getFloatValue(val1) < getFloatValue(val2));
+                return std::shared_ptr<Boolean>(new Boolean(getFloatValue(val1) < getFloatValue(val2)));
             default:
                 printf("error: unsupported operand type(s) for <\n");
                 exit(1);
@@ -124,16 +125,16 @@ namespace Operations {
         return nullptr;
     }
 
-    Value* greaterThan(Value* val1, Value* val2) {
+    std::shared_ptr<Value> greaterThan(std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
         switch (TYPE_PAIR(val1->getType(), val2->getType())) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
-                return new Boolean(getIntValue(val1) > getIntValue(val2));
+                return std::shared_ptr<Boolean>(new Boolean(getIntValue(val1) > getIntValue(val2)));
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return new Boolean(getFloatValue(val1) > static_cast<float>(getIntValue(val2)));
+                return std::shared_ptr<Boolean>(new Boolean(getFloatValue(val1) > static_cast<float>(getIntValue(val2))));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return new Boolean(static_cast<float>(getIntValue(val1)) > getFloatValue(val2));
+                return std::shared_ptr<Boolean>(new Boolean(static_cast<float>(getIntValue(val1)) > getFloatValue(val2)));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
-                return new Boolean(getFloatValue(val1) > getFloatValue(val2));
+                return std::shared_ptr<Boolean>(new Boolean(getFloatValue(val1) > getFloatValue(val2)));
             default:
                 printf("error: unsupported operand type(s) for >\n");
                 exit(1);
@@ -141,15 +142,15 @@ namespace Operations {
         return nullptr;
     }
 
-    Value* logicalAnd(Value* val1, Value* val2) {
-        return new Boolean(getBoolValue(val1) && getBoolValue(val2));
+    std::shared_ptr<Value> logicalAnd(std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
+        return std::shared_ptr<Boolean>(new Boolean(getBoolValue(val1) && getBoolValue(val2)));
     }
 
-    Value* logicalOr(Value* val1, Value* val2) {
-        return new Boolean(getBoolValue(val1) || getBoolValue(val2));
+    std::shared_ptr<Value> logicalOr(std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
+        return std::shared_ptr<Boolean>(new Boolean(getBoolValue(val1) || getBoolValue(val2)));
     }
 
-    Value* performBinary(Value* value1, std::string op, Value* value2) {
+    std::shared_ptr<Value> performBinary(std::shared_ptr<Value> value1, std::string op, std::shared_ptr<Value> value2) {
             if (op.length() == 1) {
                 switch (op[0]) {
                     case '+':

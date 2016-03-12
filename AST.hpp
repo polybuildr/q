@@ -1,13 +1,14 @@
 #ifndef AST_HPP
 #define AST_HPP
 
+#include <memory>
 #include <vector>
 #include <string>
 
 class Visitor;
 class Value;
 
-#define ACCEPT_VISITOR_DECLARE Value* accept(Visitor *v);
+#define ACCEPT_VISITOR_DECLARE std::shared_ptr<Value> accept(Visitor *v);
 
 enum class NodeType;
 
@@ -15,7 +16,7 @@ class ASTNode {
 protected:
     NodeType nodeType;
 public:
-    virtual Value* accept(Visitor *v) = 0;
+    virtual std::shared_ptr<Value> accept(Visitor *v) = 0;
 };
 
 class ListNode {

@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "AST.hpp"
 #include "Visitor.hpp"
 
@@ -16,7 +18,7 @@ enum class NodeType {
     FOR
 };
 
-#define ACCEPT_VISITOR(CLASS) Value* CLASS::accept(Visitor *v) { return v->visit(this); }
+#define ACCEPT_VISITOR(CLASS) std::shared_ptr<Value> CLASS::accept(Visitor *v) { return v->visit(this); }
 
 void ListNode::append(ASTNode *node) {
     list.push_back(node);
