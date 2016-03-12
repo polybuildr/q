@@ -5,7 +5,7 @@
 #include <cinttypes>
 #include <memory>
 
-enum class ValueType { INT, REAL, CHAR, BOOL };
+enum class ValueType { INT, REAL, CHAR, BOOL, UNDEFINED };
 
 union ValueData {
     int64_t num;
@@ -13,10 +13,17 @@ union ValueData {
 };
 
 struct Value {
+    bool constant;
     ValueType type;
     ValueData data;
 
+    Value() {
+        type = ValueType::UNDEFINED;
+        constant = false;
+    }
+
     Value(std::shared_ptr<Value> pv) {
+        constant = false;
         type = pv->type;
         switch (type) {
             case ValueType::INT:
@@ -32,22 +39,20 @@ struct Value {
         }
     }
 
-    Value() {
-        type = ValueType::INT;
-        data.num = 0;
-    }
-
     Value(int v) {
+        constant = false;
         type = ValueType::INT;
         data.num = v;
     }
 
      Value(double v) {
+         constant = false;
          type = ValueType::REAL;
          data.dbl = v;
      }
 
      Value(bool v) {
+         constant = false;
          type = ValueType::BOOL;
          data.num = v;
      }

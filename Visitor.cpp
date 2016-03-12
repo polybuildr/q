@@ -8,7 +8,7 @@
 #include "Utils.cpp"
 
 void Visitor::pushNewSymbolFrame() {
-    std::map<std::string, std::pair<std::shared_ptr<Value>, bool> > frame;
+    std::map<std::string, std::shared_ptr<Value> > frame;
     symbols.push_back(frame);
 }
 
@@ -39,28 +39,28 @@ std::shared_ptr<Value> Visitor::visit(AssignmentNode *node) {
     if (!node->isAlsoDeclaration) {
         for (auto it = symbols.rbegin(); it != symbols.rend(); ++it) {
             if ((*it).find(id) != (*it).end()) {
-                if (((*it)[id]).second == false) {
+                if (((*it)[id])->constant == true) {
                     printf("error: read-only variable '%s' is not assignable, exiting\n", id.c_str());
                     exit(1);
                 }
                 std::shared_ptr<Value> value(node->value->accept(this));
-                (*it)[id] = std::make_pair(value, true);
+                (*it)[id] = value;
                 return nullptr;
             }
         }
         printf("error: use of undeclared identifier '%s', exiting\n", id.c_str());
         exit(1);
     } else {
-        bool isMutable = node->isMutable;
         std::shared_ptr<Value> value(node->value->accept(this));
-        symbols.back()[id] = std::make_pair(value, isMutable);
+        value->constant = !node->isMutable;
+        symbols.back()[id] = value;
     }
     return nullptr;
 }
 
 std::shared_ptr<Value> Visitor::visit(DeclarationNode *node) {
     std::string id = dynamic_cast<LocationNode *>(node->locationNode)->id;
-    symbols.back()[id] = std::make_pair(nullptr, true); // TODO: Create `undefined` or something
+    symbols.back()[id] = std::make_shared<Value>();
     return nullptr;
 }
 
@@ -73,8 +73,8 @@ std::shared_ptr<Value> Visitor::visit(PrintNode *node) {
 std::shared_ptr<Value> Visitor::visit(LocationNode *node) {
     for (auto it = symbols.rbegin(); it != symbols.rend(); ++it) {
         if ((*it).find(node->id) != (*it).end()) {
-            std::shared_ptr<Value> value((*it)[node->id].first);
-            if (value == nullptr) {
+            std::shared_ptr<Value> value((*it)[node->id]);
+            if (value->type == ValueType::UNDEFINED) {
                 printf("error: use of unitialised identifier '%s', exiting\n", node->id.c_str());
                 exit(1);
             }

@@ -23,7 +23,7 @@ class Value;
 
 class Visitor {
 protected:
-    std::list< std::map<std::string, std::pair< std::shared_ptr<Value>, bool> > > symbols;
+    std::list< std::map<std::string, std::shared_ptr<Value> > > symbols;
 public:
     std::shared_ptr<Value> visit(StatementsListNode *);
     std::shared_ptr<Value> visit(BlockNode *);
