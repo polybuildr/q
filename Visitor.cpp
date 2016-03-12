@@ -90,24 +90,24 @@ std::shared_ptr<Value> Visitor::visit(BinaryExpressionNode *node) {
     std::shared_ptr<Value> value1(node->expr1->accept(this));
     std::shared_ptr<Value> value2(node->expr2->accept(this));
 
-    return std::shared_ptr<Value>(Operations::performBinary(value1, node->op, value2));
+    return std::make_shared<Value>(Operations::performBinary(value1, node->op, value2));
 }
 
 std::shared_ptr<Value> Visitor::visit(IntLiteralNode *node) {
-    return std::make_shared<Integer>(node->value);
+    return std::make_shared<Value>(node->value);
 }
 
 std::shared_ptr<Value> Visitor::visit(FloatLiteralNode *node) {
-    return std::shared_ptr<Value>(new RealNumber(node->value));
+    return std::make_shared<Value>(node->value);
 }
 
 std::shared_ptr<Value> Visitor::visit(BoolLiteralNode *node) {
-    return std::shared_ptr<Value>(new Boolean(node->value));
+    return std::make_shared<Value>(node->value);
 }
 
 std::shared_ptr<Value> Visitor::visit(IfNode *node) {
     std::shared_ptr<Value> expr(node->condition->accept(this));
-    if (Operations::getBoolValue(expr)) {
+    if (getBoolValue(expr)) {
         node->thenBlock->accept(this);
     } else if (node->elseBlock) {
         node->elseBlock->accept(this);
@@ -119,7 +119,7 @@ std::shared_ptr<Value> Visitor::visit(ForLoopNode *node) {
     pushNewSymbolFrame();
     node->init->accept(this);
     std::shared_ptr<Value> condition(node->condition->accept(this));
-    while (Operations::getBoolValue(condition)) {
+    while (getBoolValue(condition)) {
         node->body->accept(this);
         node->increment->accept(this);
         condition = node->condition->accept(this);
