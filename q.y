@@ -44,10 +44,10 @@ StatementsListNode *program;
 %right "then" ELSE
 
 %%
-PROGRAM: statements { program = dynamic_cast<StatementsListNode *>$1; }
+PROGRAM: statements { program = static_cast<StatementsListNode *>$1; }
 
 statements: /* empty */ { $$ = new StatementsListNode();  }
-          | statements statement { $$ = $1; dynamic_cast<StatementsListNode *>($$)->append($2); }
+          | statements statement { $$ = $1; static_cast<StatementsListNode *>($$)->append($2); }
           | statements ';' { $$ = $1; }
           ;
 

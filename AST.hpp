@@ -16,7 +16,9 @@ class ASTNode {
 protected:
     NodeType nodeType;
 public:
-    virtual std::shared_ptr<Value> accept(Visitor *v) = 0;
+    virtual std::shared_ptr<Value> accept(Visitor *v) {
+        return nullptr;
+    }
 };
 
 class ListNode {
@@ -26,21 +28,21 @@ public:
     void append(ASTNode *node);
 };
 
-class StatementsListNode: public virtual ASTNode, public ListNode {
+class StatementsListNode: public ASTNode, public ListNode {
 public:
     ACCEPT_VISITOR_DECLARE
 
     StatementsListNode();
 };
 
-class BlockNode: public virtual ASTNode {
+class BlockNode: public ASTNode {
 public:
     ACCEPT_VISITOR_DECLARE
     ASTNode *statementsList;
     BlockNode(ASTNode*);
 };
 
-class AssignmentNode: public virtual ASTNode {
+class AssignmentNode: public ASTNode {
 public:
     ACCEPT_VISITOR_DECLARE
     ASTNode *locationNode;
@@ -50,14 +52,14 @@ public:
     AssignmentNode(ASTNode *location, ASTNode *val, bool isAlsoDeclaration = false, bool isMutable = true);
 };
 
-class DeclarationNode: public virtual ASTNode {
+class DeclarationNode: public ASTNode {
 public:
     ACCEPT_VISITOR_DECLARE
     ASTNode *locationNode;
     DeclarationNode(ASTNode *location);
 };
 
-class PrintNode: public virtual ASTNode {
+class PrintNode: public ASTNode {
 public:
     ACCEPT_VISITOR_DECLARE
 
@@ -65,7 +67,7 @@ public:
     PrintNode(ASTNode *expr);
 };
 
-class LocationNode: public virtual ASTNode {
+class LocationNode: public ASTNode {
 public:
     ACCEPT_VISITOR_DECLARE
 
@@ -73,7 +75,7 @@ public:
     LocationNode(std::string id);
 };
 
-class BinaryExpressionNode: public virtual ASTNode {
+class BinaryExpressionNode: public ASTNode {
 public:
     ACCEPT_VISITOR_DECLARE
 
@@ -83,7 +85,7 @@ public:
     BinaryExpressionNode(ASTNode *expr1, std::string op, ASTNode *expr2);
 };
 
-class IntLiteralNode: public virtual ASTNode {
+class IntLiteralNode: public ASTNode {
 public:
     ACCEPT_VISITOR_DECLARE
 
@@ -91,7 +93,7 @@ public:
     IntLiteralNode(int value);
 };
 
-class FloatLiteralNode: public virtual ASTNode {
+class FloatLiteralNode: public ASTNode {
 public:
     ACCEPT_VISITOR_DECLARE
 
@@ -99,7 +101,7 @@ public:
     FloatLiteralNode(float value);
 };
 
-class BoolLiteralNode: public virtual ASTNode {
+class BoolLiteralNode: public ASTNode {
 public:
     ACCEPT_VISITOR_DECLARE
 
@@ -107,7 +109,7 @@ public:
     BoolLiteralNode(bool value);
 };
 
-class IfNode: public virtual ASTNode {
+class IfNode: public ASTNode {
 public:
     ACCEPT_VISITOR_DECLARE
 
@@ -115,7 +117,7 @@ public:
     IfNode(ASTNode *condition, ASTNode *thenBlock, ASTNode *elseBlock = nullptr);
 };
 
-class ForLoopNode: public virtual ASTNode {
+class ForLoopNode: public ASTNode {
 public:
     ACCEPT_VISITOR_DECLARE
 

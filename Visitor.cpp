@@ -35,7 +35,7 @@ std::shared_ptr<Value> Visitor::visit(BlockNode *node) {
 }
 
 std::shared_ptr<Value> Visitor::visit(AssignmentNode *node) {
-    std::string id = dynamic_cast<LocationNode *>(node->locationNode)->id;
+    std::string id = static_cast<LocationNode *>(node->locationNode)->id;
     if (!node->isAlsoDeclaration) {
         for (auto it = symbols.rbegin(); it != symbols.rend(); ++it) {
             if ((*it).find(id) != (*it).end()) {
@@ -59,7 +59,7 @@ std::shared_ptr<Value> Visitor::visit(AssignmentNode *node) {
 }
 
 std::shared_ptr<Value> Visitor::visit(DeclarationNode *node) {
-    std::string id = dynamic_cast<LocationNode *>(node->locationNode)->id;
+    std::string id = static_cast<LocationNode *>(node->locationNode)->id;
     symbols.back()[id] = std::make_shared<Value>();
     return nullptr;
 }
