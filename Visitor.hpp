@@ -2,7 +2,7 @@
 #define VISITOR_HPP
 
 #include <cstdio>
-#include <list>
+#include <vector>
 #include <map>
 #include <memory>
 
@@ -23,7 +23,7 @@ class Value;
 
 class Visitor {
 protected:
-    std::list< std::map<std::string, std::shared_ptr<Value> > > symbols;
+    std::vector< std::map<std::string, std::shared_ptr<Value> > > symbols;
 public:
     std::shared_ptr<Value> visit(StatementsListNode *);
     std::shared_ptr<Value> visit(BlockNode *);
