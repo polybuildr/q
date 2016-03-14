@@ -123,7 +123,7 @@ namespace Operations {
         return std::make_shared<Value>(getBoolValue(val1) || getBoolValue(val2));
     }
 
-    std::shared_ptr<Value> performBinary(std::shared_ptr<Value> value1, std::string op, std::shared_ptr<Value> value2) {
+    std::shared_ptr<Value> performBinary(const std::shared_ptr<Value> value1, const std::string op, const std::shared_ptr<Value> value2) {
             if (op.length() == 1) {
                 switch (op[0]) {
                     case '+':
