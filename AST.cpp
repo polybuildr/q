@@ -68,7 +68,7 @@ id(id) {
 
 ACCEPT_VISITOR(LocationNode)
 
-BinaryExpressionNode::BinaryExpressionNode(ASTNode *expr1, std::string op, ASTNode *expr2):
+BinaryExpressionNode::BinaryExpressionNode(ASTNode *expr1, BinaryOp op, ASTNode *expr2):
 expr1(expr1),
 op(op),
 expr2(expr2) {

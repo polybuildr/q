@@ -8,6 +8,17 @@
 class Visitor;
 class Value;
 
+enum class BinaryOp {
+    ADD,
+    SUBTRACT,
+    MULTIPLY,
+    DIVIDE,
+    GREATER_THAN,
+    LESS_THAN,
+    LOGICAL_AND,
+    LOGICAL_OR
+};
+
 #define ACCEPT_VISITOR_DECLARE std::shared_ptr<Value> accept(Visitor *v);
 
 enum class NodeType;
@@ -80,9 +91,9 @@ public:
     ACCEPT_VISITOR_DECLARE
 
     ASTNode *expr1, *expr2;
-    std::string op;
+    BinaryOp op;
 
-    BinaryExpressionNode(ASTNode *expr1, std::string op, ASTNode *expr2);
+    BinaryExpressionNode(ASTNode *expr1, BinaryOp op, ASTNode *expr2);
 };
 
 class IntLiteralNode: public ASTNode {

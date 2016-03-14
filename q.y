@@ -51,16 +51,16 @@ statements: /* empty */ { $$ = new StatementsListNode();  }
           | statements ';' { $$ = $1; }
           ;
 
-statement: statementElem ';' 
-         | block 
+statement: statementElem ';'
+         | block
          | IF '(' expr ')' statement { $$ = new IfNode($3, $5); } %prec "then"
          | IF '(' expr ')' statement ELSE statement { $$ = new IfNode($3, $5, $7); }
          | FOR '(' statementElem ';' expr ';' statementElem ')' statement { $$ = new ForLoopNode($3, $5, $7, $9); }
          ;
 
-statementElem: assignment 
+statementElem: assignment
        | declaration
-       | printer 
+       | printer
        ;
 
 block: '{' statements '}' { $$ = new BlockNode($2); }
@@ -82,14 +82,14 @@ printer: '@' expr { $$ = new PrintNode($2); }
 
 expr: literal { $$ = $1; }
     | location
-    | expr '+' expr { $$ = new BinaryExpressionNode($1, "+", $3); }
-    | expr '-' expr { $$ = new BinaryExpressionNode($1, "-", $3); }
-    | expr '*' expr { $$ = new BinaryExpressionNode($1, "*", $3); }
-    | expr '/' expr { $$ = new BinaryExpressionNode($1, "/", $3); }
-    | expr '<' expr { $$ = new BinaryExpressionNode($1, "<", $3); }
-    | expr '>' expr { $$ = new BinaryExpressionNode($1, ">", $3); }
-    | expr LOGICAL_AND expr { $$ = new BinaryExpressionNode($1, "&&", $3); }
-    | expr LOGICAL_OR expr { $$ = new BinaryExpressionNode($1, "||", $3); }
+    | expr '+' expr { $$ = new BinaryExpressionNode($1, BinaryOp::ADD, $3); }
+    | expr '-' expr { $$ = new BinaryExpressionNode($1, BinaryOp::SUBTRACT, $3); }
+    | expr '*' expr { $$ = new BinaryExpressionNode($1, BinaryOp::MULTIPLY, $3); }
+    | expr '/' expr { $$ = new BinaryExpressionNode($1, BinaryOp::DIVIDE, $3); }
+    | expr '<' expr { $$ = new BinaryExpressionNode($1, BinaryOp::LESS_THAN, $3); }
+    | expr '>' expr { $$ = new BinaryExpressionNode($1, BinaryOp::GREATER_THAN, $3); }
+    | expr LOGICAL_AND expr { $$ = new BinaryExpressionNode($1, BinaryOp::LOGICAL_AND, $3); }
+    | expr LOGICAL_OR expr { $$ = new BinaryExpressionNode($1, BinaryOp::LOGICAL_OR, $3); }
     ;
 
 literal: INT_LITERAL { $$ = new IntLiteralNode($1); }

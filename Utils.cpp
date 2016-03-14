@@ -1,6 +1,7 @@
 #include <string>
 #include <memory>
 
+#include "AST.hpp"
 #include "Value.hpp"
 
 #define TYPE_PAIR(t1,t2) ((static_cast<int>(t1) << 4) | static_cast<int>(t2))
@@ -123,28 +124,25 @@ namespace Operations {
         return std::make_shared<Value>(getBoolValue(val1) || getBoolValue(val2));
     }
 
-    std::shared_ptr<Value> performBinary(const std::shared_ptr<Value> value1, const std::string op, const std::shared_ptr<Value> value2) {
-            if (op.length() == 1) {
-                switch (op[0]) {
-                    case '+':
+    std::shared_ptr<Value> performBinary(const std::shared_ptr<Value> value1, BinaryOp op, const std::shared_ptr<Value> value2) {
+                switch (op) {
+                    case BinaryOp::ADD:
                         return Operations::add(value1, value2);
-                    case '-':
+                    case BinaryOp::SUBTRACT:
                         return Operations::sub(value1, value2);
-                    case '*':
+                    case BinaryOp::MULTIPLY:
                         return Operations::mul(value1, value2);
-                    case '/':
+                    case BinaryOp::DIVIDE:
                         return Operations::div(value1, value2);
-                    case '>':
+                    case BinaryOp::GREATER_THAN:
                         return Operations::greaterThan(value1, value2);
-                    case '<':
+                    case BinaryOp::LESS_THAN:
                         return Operations::lessThan(value1, value2);
+                    case BinaryOp::LOGICAL_AND:
+                        return Operations::logicalAnd(value1, value2);
+                    case BinaryOp::LOGICAL_OR:
+                        return Operations::logicalOr(value1, value2);
                 }
-            }
-            if (op == "&&") {
-                return Operations::logicalAnd(value1, value2);
-            } else if (op == "||") {
-                return Operations::logicalOr(value1, value2);
-            }
             return nullptr;
     }
 };
