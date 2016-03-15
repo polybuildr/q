@@ -43,13 +43,14 @@ std::shared_ptr<Value> Visitor::visit(AssignmentNode *node) {
     std::string id = static_cast<LocationNode *>(node->locationNode)->id;
     if (!node->isAlsoDeclaration) {
         for (auto it = symbols.rbegin(); it != symbols.rend(); ++it) {
-            if ((*it).find(id) != (*it).end()) {
-                if (((*it)[id])->constant == true) {
+            auto v = (*it).find(id);
+            if (v != (*it).end()) {
+                if (v->second->constant == true) {
                     printf("error: read-only variable '%s' is not assignable, exiting\n", id.c_str());
                     exit(1);
                 }
                 std::shared_ptr<Value> value(node->value->accept(this));
-                (*it)[id] = value;
+                v->second = value;
                 return nullptr;
             }
         }
