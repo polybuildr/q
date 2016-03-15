@@ -113,6 +113,12 @@ std::shared_ptr<Value> Visitor::visit(BinaryExpressionNode *node) {
         } else if (result.data.num < 0 && result.data.num >= -256) {
             return smallInts[512 + result.data.num];
         }
+    } else if (result.type == ValueType::BOOL) {
+        if (result.data.num) {
+            return trueValue;
+        } else {
+            return falseValue;
+        }
     }
     return std::make_shared<Value>(result);
 }
