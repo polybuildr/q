@@ -1,5 +1,6 @@
 %{
 #include <cstdio>
+#include <cstdint>
 
 #include "AST.hpp"
 #include "Visitor.hpp"
@@ -15,8 +16,8 @@ StatementsListNode *program;
 %}
 
 %union {
-    int ival;
-    float fval;
+    int64_t ival;
+    double fval;
     char *sval;
     ASTNode *node;
 }

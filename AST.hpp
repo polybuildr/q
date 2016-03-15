@@ -1,6 +1,7 @@
 #ifndef AST_HPP
 #define AST_HPP
 
+#include <cstdint>
 #include <memory>
 #include <vector>
 #include <string>
@@ -100,16 +101,16 @@ class IntLiteralNode: public ASTNode {
 public:
     ACCEPT_VISITOR_DECLARE
 
-    int value;
-    IntLiteralNode(int value);
+    int64_t value;
+    IntLiteralNode(int64_t value);
 };
 
 class FloatLiteralNode: public ASTNode {
 public:
     ACCEPT_VISITOR_DECLARE
 
-    float value;
-    FloatLiteralNode(float value);
+    double value;
+    FloatLiteralNode(double value);
 };
 
 class BoolLiteralNode: public ASTNode {

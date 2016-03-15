@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <string>
 #include <memory>
 
@@ -12,9 +13,9 @@ namespace Operations {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
                 return std::make_shared<Value>(getIntValue(val1) + getIntValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return std::make_shared<Value>(getDoubleValue(val1) + static_cast<float>(getIntValue(val2)));
+                return std::make_shared<Value>(getDoubleValue(val1) + static_cast<double>(getIntValue(val2)));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return std::make_shared<Value>(static_cast<float>(getIntValue(val1)) + getDoubleValue(val2));
+                return std::make_shared<Value>(static_cast<double>(getIntValue(val1)) + getDoubleValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
                 return std::make_shared<Value>(getDoubleValue(val1) + getDoubleValue(val2));
             default:
@@ -29,9 +30,9 @@ namespace Operations {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
                 return std::make_shared<Value>(getIntValue(val1) - getIntValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return std::make_shared<Value>(getDoubleValue(val1) - static_cast<float>(getIntValue(val2)));
+                return std::make_shared<Value>(getDoubleValue(val1) - static_cast<double>(getIntValue(val2)));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return std::make_shared<Value>(static_cast<float>(getIntValue(val1)) - getDoubleValue(val2));
+                return std::make_shared<Value>(static_cast<double>(getIntValue(val1)) - getDoubleValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
                 return std::make_shared<Value>(getDoubleValue(val1) - getDoubleValue(val2));
             default:
@@ -46,9 +47,9 @@ namespace Operations {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
                 return std::make_shared<Value>(getIntValue(val1) * getIntValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return std::make_shared<Value>(getDoubleValue(val1) * static_cast<float>(getIntValue(val2)));
+                return std::make_shared<Value>(getDoubleValue(val1) * static_cast<double>(getIntValue(val2)));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return std::make_shared<Value>(static_cast<float>(getIntValue(val1)) * getDoubleValue(val2));
+                return std::make_shared<Value>(static_cast<double>(getIntValue(val1)) * getDoubleValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
                 return std::make_shared<Value>(getDoubleValue(val1) * getDoubleValue(val2));
             default:
@@ -59,7 +60,7 @@ namespace Operations {
     }
 
     std::shared_ptr<Value> div(std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
-        int a, b;
+        int64_t a, b;
         switch (TYPE_PAIR(val1->type, val2->type)) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
                 a = getIntValue(val1);
@@ -67,12 +68,12 @@ namespace Operations {
                 if (a % b == 0) {
                     return std::make_shared<Value>(a / b);
                 } else {
-                    return std::make_shared<Value>(static_cast<float>(a) / b);
+                    return std::make_shared<Value>(static_cast<double>(a) / b);
                 }
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return std::make_shared<Value>(getDoubleValue(val1) / static_cast<float>(getIntValue(val2)));
+                return std::make_shared<Value>(getDoubleValue(val1) / static_cast<double>(getIntValue(val2)));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return std::make_shared<Value>(static_cast<float>(getIntValue(val1)) / getDoubleValue(val2));
+                return std::make_shared<Value>(static_cast<double>(getIntValue(val1)) / getDoubleValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
                 return std::make_shared<Value>(getDoubleValue(val1) / getDoubleValue(val2));
             default:
@@ -87,9 +88,9 @@ namespace Operations {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
                 return std::make_shared<Value>(getIntValue(val1) < getIntValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return std::make_shared<Value>(getDoubleValue(val1) < static_cast<float>(getIntValue(val2)));
+                return std::make_shared<Value>(getDoubleValue(val1) < static_cast<double>(getIntValue(val2)));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return std::make_shared<Value>(static_cast<float>(getIntValue(val1)) < getDoubleValue(val2));
+                return std::make_shared<Value>(static_cast<double>(getIntValue(val1)) < getDoubleValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
                 return std::make_shared<Value>(getDoubleValue(val1) < getDoubleValue(val2));
             default:
@@ -104,9 +105,9 @@ namespace Operations {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
                 return std::make_shared<Value>(getIntValue(val1) > getIntValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::INT):
-                return std::make_shared<Value>(getDoubleValue(val1) > static_cast<float>(getIntValue(val2)));
+                return std::make_shared<Value>(getDoubleValue(val1) > static_cast<double>(getIntValue(val2)));
             case TYPE_PAIR(ValueType::INT, ValueType::REAL):
-                return std::make_shared<Value>(static_cast<float>(getIntValue(val1)) > getDoubleValue(val2));
+                return std::make_shared<Value>(static_cast<double>(getIntValue(val1)) > getDoubleValue(val2));
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
                 return std::make_shared<Value>(getDoubleValue(val1) > getDoubleValue(val2));
             default:

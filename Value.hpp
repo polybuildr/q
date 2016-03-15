@@ -39,7 +39,7 @@ struct Value {
         }
     }
 
-    Value(int v) {
+    Value(int64_t v) {
         constant = false;
         type = ValueType::INT;
         data.num = v;
@@ -78,7 +78,7 @@ struct Value {
      }
 };
 
-int getIntValue(std::shared_ptr<Value> v) {
+int64_t getIntValue(std::shared_ptr<Value> v) {
     switch (v->type) {
         case ValueType::INT:
             return v->data.num;

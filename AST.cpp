@@ -77,14 +77,14 @@ expr2(expr2) {
 
 ACCEPT_VISITOR(BinaryExpressionNode)
 
-IntLiteralNode::IntLiteralNode(int value):
+IntLiteralNode::IntLiteralNode(int64_t value):
 value(value) {
     nodeType = NodeType::INT_LITERAL;
 }
 
 ACCEPT_VISITOR(IntLiteralNode)
 
-FloatLiteralNode::FloatLiteralNode(float value):
+FloatLiteralNode::FloatLiteralNode(double value):
 value(value) {
     nodeType = NodeType::FLOAT_LITERAL;
 }
