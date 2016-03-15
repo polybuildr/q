@@ -3,21 +3,6 @@
 #include "AST.hpp"
 #include "Visitor.hpp"
 
-enum class NodeType {
-    STATEMENTS_LIST,
-    BLOCK,
-    ASSIGNMENT,
-    DECLARATION,
-    PRINT,
-    LOCATION,
-    BINARY_EXPR,
-    INT_LITERAL,
-    FLOAT_LITERAL,
-    BOOL_LITERAL,
-    IF,
-    FOR
-};
-
 #define ACCEPT_VISITOR(CLASS) inline std::shared_ptr<Value> CLASS::accept(Visitor *v) { return v->visit(this); }
 
 void ListNode::append(ASTNode *node) {

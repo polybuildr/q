@@ -6,6 +6,7 @@
 #include <map>
 #include <memory>
 
+class ASTNode;
 class StatementsListNode;
 class BlockNode;
 class AssignmentNode;
@@ -40,6 +41,7 @@ public:
     Visitor();
     void pushNewSymbolFrame();
     void popSymbolFrame();
+    std::shared_ptr<Value> callVisitOn(ASTNode *);
 };
 
 #endif

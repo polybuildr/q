@@ -9,6 +9,21 @@
 class Visitor;
 class Value;
 
+enum class NodeType {
+    STATEMENTS_LIST,
+    BLOCK,
+    ASSIGNMENT,
+    DECLARATION,
+    PRINT,
+    LOCATION,
+    BINARY_EXPR,
+    INT_LITERAL,
+    FLOAT_LITERAL,
+    BOOL_LITERAL,
+    IF,
+    FOR
+};
+
 enum class BinaryOp {
     ADD,
     SUBTRACT,
@@ -25,9 +40,8 @@ enum class BinaryOp {
 enum class NodeType;
 
 class ASTNode {
-protected:
-    NodeType nodeType;
 public:
+    NodeType nodeType;
     virtual std::shared_ptr<Value> accept(Visitor *v) {
         return nullptr;
     }
