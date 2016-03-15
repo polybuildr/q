@@ -89,8 +89,8 @@ std::shared_ptr<Value> Visitor::visit(LocationNode *node) {
 }
 
 std::shared_ptr<Value> Visitor::visit(BinaryExpressionNode *node) {
-    std::shared_ptr<Value> value1(node->expr1->accept(this));
-    std::shared_ptr<Value> value2(node->expr2->accept(this));
+    Value value1(node->expr1->accept(this));
+    Value value2(node->expr2->accept(this));
 
     Operations::performBinary(result, value1, node->op, value2);
     return std::make_shared<Value>(result);
