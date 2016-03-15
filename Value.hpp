@@ -107,12 +107,35 @@ int64_t getIntValue(std::shared_ptr<Value> v) {
     return 0;
 }
 
+int64_t getIntValue(Value v) {
+    switch (v.type) {
+        case ValueType::INT:
+            return v.data.num;
+        default:
+            printf("error: cannot get int value, exiting\n");
+            exit(1);
+    }
+    return 0;
+}
+
 double getDoubleValue(std::shared_ptr<Value> v) {
     switch (v->type) {
         case ValueType::INT:
             return v->data.num;
         case ValueType::REAL:
             return v->data.dbl;
+        default:
+            printf("error: cannot get real value, exiting\n");
+            exit(1);
+    }
+}
+
+double getDoubleValue(Value v) {
+    switch (v.type) {
+        case ValueType::INT:
+            return v.data.num;
+        case ValueType::REAL:
+            return v.data.dbl;
         default:
             printf("error: cannot get real value, exiting\n");
             exit(1);
@@ -126,6 +149,20 @@ bool getBoolValue(std::shared_ptr<Value> v) {
             return v->data.num;
         case ValueType::REAL:
             return v->data.dbl;
+        default:
+            printf("error: cannot get bool value, exiting\n");
+            exit(1);
+    }
+    return 0;
+}
+
+bool getBoolValue(Value v) {
+    switch (v.type) {
+        case ValueType::INT:
+        case ValueType::BOOL:
+            return v.data.num;
+        case ValueType::REAL:
+            return v.data.dbl;
         default:
             printf("error: cannot get bool value, exiting\n");
             exit(1);

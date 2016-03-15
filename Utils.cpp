@@ -8,8 +8,8 @@
 #define TYPE_PAIR(t1,t2) ((static_cast<int>(t1) << 4) | static_cast<int>(t2))
 
 namespace Operations {
-    void add(Value &result, std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
-        switch (TYPE_PAIR(val1->type, val2->type)) {
+    void add(Value &result, Value val1, Value val2) {
+        switch (TYPE_PAIR(val1.type, val2.type)) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
                 result.set(getIntValue(val1) + getIntValue(val2));
                 break;
@@ -28,8 +28,8 @@ namespace Operations {
         }
     }
 
-    void sub(Value &result, std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
-        switch (TYPE_PAIR(val1->type, val2->type)) {
+    void sub(Value &result, Value val1, Value val2) {
+        switch (TYPE_PAIR(val1.type, val2.type)) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
                 result.set(getIntValue(val1) - getIntValue(val2));
                 break;
@@ -49,8 +49,8 @@ namespace Operations {
 
     }
 
-    void mul(Value &result, std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
-        switch (TYPE_PAIR(val1->type, val2->type)) {
+    void mul(Value &result, Value val1, Value val2) {
+        switch (TYPE_PAIR(val1.type, val2.type)) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
                 result.set(getIntValue(val1) * getIntValue(val2));
                 break;
@@ -70,9 +70,9 @@ namespace Operations {
 
     }
 
-    void div(Value &result, std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
+    void div(Value &result, Value val1, Value val2) {
         int64_t a, b;
-        switch (TYPE_PAIR(val1->type, val2->type)) {
+        switch (TYPE_PAIR(val1.type, val2.type)) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
                 a = getIntValue(val1);
                 b = getIntValue(val2);
@@ -98,8 +98,8 @@ namespace Operations {
 
     }
 
-    void lessThan(Value &result, std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
-        switch (TYPE_PAIR(val1->type, val2->type)) {
+    void lessThan(Value &result, Value val1, Value val2) {
+        switch (TYPE_PAIR(val1.type, val2.type)) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
                 result.set(getIntValue(val1) < getIntValue(val2));
                 break;
@@ -119,8 +119,8 @@ namespace Operations {
 
     }
 
-    void greaterThan(Value &result, std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
-        switch (TYPE_PAIR(val1->type, val2->type)) {
+    void greaterThan(Value &result, Value val1, Value val2) {
+        switch (TYPE_PAIR(val1.type, val2.type)) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
                 result.set(getIntValue(val1) > getIntValue(val2));
                 break;
@@ -140,15 +140,15 @@ namespace Operations {
 
     }
 
-    void logicalAnd(Value &result, std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
+    void logicalAnd(Value &result, Value val1, Value val2) {
         result.set(getBoolValue(val1) && getBoolValue(val2));
     }
 
-    void logicalOr(Value &result, std::shared_ptr<Value> val1, std::shared_ptr<Value> val2) {
+    void logicalOr(Value &result, Value val1, Value val2) {
         result.set(getBoolValue(val1) || getBoolValue(val2));
     }
 
-    void performBinary(Value &result, std::shared_ptr<Value> value1, BinaryOp op, std::shared_ptr<Value> value2) {
+    void performBinary(Value &result, Value value1, BinaryOp op, Value value2) {
                 switch (op) {
                     case BinaryOp::ADD:
                         Operations::add(result, value1, value2);
