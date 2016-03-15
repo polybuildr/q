@@ -11,6 +11,9 @@
 Value result;
 
 std::unordered_map<int64_t, std::shared_ptr<Value>> allocatedIntegers;
+std::unordered_map<double, std::shared_ptr<Value>> allocatedReals;
+std::shared_ptr<Value> trueValue;
+std::shared_ptr<Value> falseValue;
 
 void Visitor::pushNewSymbolFrame() {
     std::map<std::string, std::shared_ptr<Value> > frame;
@@ -22,6 +25,8 @@ void Visitor::popSymbolFrame() {
 }
 
 Visitor::Visitor() {
+    trueValue = std::make_shared<Value>(true);
+    falseValue = std::make_shared<Value>(false);
     pushNewSymbolFrame();
 }
 
@@ -112,11 +117,22 @@ std::shared_ptr<Value> Visitor::visit(IntLiteralNode *node) {
 }
 
 std::shared_ptr<Value> Visitor::visit(FloatLiteralNode *node) {
-    return std::make_shared<Value>(node->value);
+    std::shared_ptr<Value> value;
+    auto r = allocatedReals.find(node->value);
+    if (r == allocatedReals.end()) {
+        value = std::make_shared<Value>(node->value);
+        allocatedReals[node->value] = value;
+        return value;
+    }
+    return r->second;
 }
 
 std::shared_ptr<Value> Visitor::visit(BoolLiteralNode *node) {
-    return std::make_shared<Value>(node->value);
+    if (node->value) {
+        return trueValue;
+    } else {
+        return falseValue;
+    }
 }
 
 std::shared_ptr<Value> Visitor::visit(IfNode *node) {
