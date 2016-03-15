@@ -1,4 +1,5 @@
 #include <map>
+#include <unordered_map>
 #include <list>
 #include <memory>
 
@@ -8,6 +9,8 @@
 #include "Utils.cpp"
 
 Value result;
+
+std::unordered_map<int64_t, std::shared_ptr<Value>> allocatedIntegers;
 
 void Visitor::pushNewSymbolFrame() {
     std::map<std::string, std::shared_ptr<Value> > frame;
@@ -97,7 +100,14 @@ std::shared_ptr<Value> Visitor::visit(BinaryExpressionNode *node) {
 }
 
 std::shared_ptr<Value> Visitor::visit(IntLiteralNode *node) {
-    return std::make_shared<Value>(node->value);
+    std::shared_ptr<Value> value;
+    auto i = allocatedIntegers.find(node->value);
+    if (i == allocatedIntegers.end()) {
+        value = std::make_shared<Value>(node->value);
+        allocatedIntegers[node->value] = value;
+        return value;
+    }
+    return i->second;
 }
 
 std::shared_ptr<Value> Visitor::visit(FloatLiteralNode *node) {
