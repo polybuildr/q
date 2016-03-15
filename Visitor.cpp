@@ -7,6 +7,8 @@
 #include "Value.hpp"
 #include "Utils.cpp"
 
+Value result;
+
 void Visitor::pushNewSymbolFrame() {
     std::map<std::string, std::shared_ptr<Value> > frame;
     symbols.push_back(frame);
@@ -90,7 +92,8 @@ std::shared_ptr<Value> Visitor::visit(BinaryExpressionNode *node) {
     std::shared_ptr<Value> value1(node->expr1->accept(this));
     std::shared_ptr<Value> value2(node->expr2->accept(this));
 
-    return std::make_shared<Value>(Operations::performBinary(value1, node->op, value2));
+    Operations::performBinary(result, value1, node->op, value2);
+    return std::make_shared<Value>(result);
 }
 
 std::shared_ptr<Value> Visitor::visit(IntLiteralNode *node) {

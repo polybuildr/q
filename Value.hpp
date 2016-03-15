@@ -45,13 +45,31 @@ struct Value {
         data.num = v;
     }
 
+    void set(int64_t v) {
+        constant = false;
+        type = ValueType::INT;
+        data.num = v;
+    }
+
      Value(double v) {
          constant = false;
          type = ValueType::REAL;
          data.dbl = v;
      }
 
+     void set(double v) {
+         constant = false;
+         type = ValueType::REAL;
+         data.dbl = v;
+     }
+
      Value(bool v) {
+         constant = false;
+         type = ValueType::BOOL;
+         data.num = v;
+     }
+
+     void set(bool v) {
          constant = false;
          type = ValueType::BOOL;
          data.num = v;
