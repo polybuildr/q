@@ -20,28 +20,29 @@ class BoolLiteralNode;
 class IfNode;
 class ForLoopNode;
 
-class Value;
+struct Value;
 
 class Visitor {
 protected:
-    std::vector< std::map<std::string, std::shared_ptr<Value> > > symbols;
+    std::vector< std::map<std::string, Value > > symbols;
 public:
-    std::shared_ptr<Value> visit(StatementsListNode *);
-    std::shared_ptr<Value> visit(BlockNode *);
-    std::shared_ptr<Value> visit(AssignmentNode *);
-    std::shared_ptr<Value> visit(DeclarationNode *);
-    std::shared_ptr<Value> visit(PrintNode *);
-    std::shared_ptr<Value> visit(LocationNode *);
-    std::shared_ptr<Value> visit(BinaryExpressionNode *);
-    std::shared_ptr<Value> visit(IntLiteralNode *);
-    std::shared_ptr<Value> visit(FloatLiteralNode *);
-    std::shared_ptr<Value> visit(BoolLiteralNode *);
-    std::shared_ptr<Value> visit(IfNode *);
-    std::shared_ptr<Value> visit(ForLoopNode *);
+    void visit(StatementsListNode *);
+    void visit(BlockNode *);
+    void visit(AssignmentNode *);
+    void visit(DeclarationNode *);
+    void visit(PrintNode *);
+    void visit(LocationNode *, Value &result);
+    void visit(BinaryExpressionNode *, Value &result);
+    void visit(IntLiteralNode *, Value &result);
+    void visit(FloatLiteralNode *, Value &result);
+    void visit(BoolLiteralNode *, Value &result);
+    void visit(IfNode *);
+    void visit(ForLoopNode *);
     Visitor();
     void pushNewSymbolFrame();
     void popSymbolFrame();
-    std::shared_ptr<Value> callVisitOn(ASTNode *);
+    void callVoidVisitOn(ASTNode *);
+    void callAndGetValueFrom(ASTNode *, Value &result);
 };
 
 #endif

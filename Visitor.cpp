@@ -10,12 +10,12 @@
 
 Value result;
 
-std::shared_ptr<Value> smallInts[512];
-std::shared_ptr<Value> trueValue;
-std::shared_ptr<Value> falseValue;
+Value smallInts[512];
+Value trueValue;
+Value falseValue;
 
 void Visitor::pushNewSymbolFrame() {
-    std::map<std::string, std::shared_ptr<Value> > frame;
+    std::map<std::string, Value > frame;
     symbols.push_back(frame);
 }
 
@@ -24,190 +24,196 @@ void Visitor::popSymbolFrame() {
 }
 
 Visitor::Visitor() {
-    trueValue = std::make_shared<Value>(true);
-    falseValue = std::make_shared<Value>(false);
+    trueValue = Value(true);
+    falseValue = Value(false);
     for (int i = 0; i < 256; ++i) {
-        smallInts[i] = std::make_shared<Value>(static_cast<int64_t>(i));
+        smallInts[i] = Value(static_cast<int64_t>(i));
     }
     for (int i = 256; i < 512; ++i) {
-        smallInts[i] = std::make_shared<Value>(static_cast<int64_t>(i - 512));
+        smallInts[i] = Value(static_cast<int64_t>(i - 512));
     }
     pushNewSymbolFrame();
 }
 
-std::shared_ptr<Value> Visitor::callVisitOn(ASTNode *node) {
+void Visitor::callAndGetValueFrom(ASTNode *node, Value &result) {
     switch (node->nodeType) {
         case NodeType::LOCATION:
-            return visit(static_cast<LocationNode *>(node));
-            break;
-        case NodeType::ASSIGNMENT:
-            return visit(static_cast<AssignmentNode *>(node));
+            visit(static_cast<LocationNode *>(node), result);
             break;
         case NodeType::BINARY_EXPR:
-            return visit(static_cast<BinaryExpressionNode *>(node));
-            break;
-        case NodeType::DECLARATION:
-            return visit(static_cast<DeclarationNode *>(node));
-            break;
-        case NodeType::STATEMENTS_LIST:
-            return visit(static_cast<StatementsListNode *>(node));
-            break;
-        case NodeType::BLOCK:
-            return visit(static_cast<BlockNode *>(node));
+            visit(static_cast<BinaryExpressionNode *>(node), result);
             break;
         case NodeType::INT_LITERAL:
-            return visit(static_cast<IntLiteralNode *>(node));
+            visit(static_cast<IntLiteralNode *>(node), result);
             break;
         case NodeType::BOOL_LITERAL:
-            return visit(static_cast<BoolLiteralNode *>(node));
+            visit(static_cast<BoolLiteralNode *>(node), result);
             break;
         case NodeType::FLOAT_LITERAL:
-            return visit(static_cast<FloatLiteralNode *>(node));
-            break;
-        case NodeType::IF:
-            return visit(static_cast<IfNode *>(node));
-            break;
-        case NodeType::FOR:
-            return visit(static_cast<ForLoopNode *>(node));
-            break;
-        case NodeType::PRINT:
-            return visit(static_cast<PrintNode *>(node));
+            visit(static_cast<FloatLiteralNode *>(node), result);
             break;
         default:
             printf("error: unknown node type, exiting\n");
             exit(1);
     }
-    return nullptr;
 }
 
-std::shared_ptr<Value> Visitor::visit(StatementsListNode *node) {
+void Visitor::callVoidVisitOn(ASTNode *node) {
+    switch (node->nodeType) {
+        case NodeType::ASSIGNMENT:
+            visit(static_cast<AssignmentNode *>(node));
+            break;
+        case NodeType::DECLARATION:
+            visit(static_cast<DeclarationNode *>(node));
+            break;
+        case NodeType::STATEMENTS_LIST:
+            visit(static_cast<StatementsListNode *>(node));
+            break;
+        case NodeType::BLOCK:
+            visit(static_cast<BlockNode *>(node));
+            break;
+        case NodeType::IF:
+            visit(static_cast<IfNode *>(node));
+            break;
+        case NodeType::FOR:
+            visit(static_cast<ForLoopNode *>(node));
+            break;
+        case NodeType::PRINT:
+            visit(static_cast<PrintNode *>(node));
+            break;
+        default:
+            printf("error: unknown node type, exiting\n");
+            exit(1);
+    }
+}
+
+void Visitor::visit(StatementsListNode *node) {
     pushNewSymbolFrame();
     for (ASTNode *statement : (node->list)) {
-        statement->accept(this);
+        callVoidVisitOn(statement);
     }
     popSymbolFrame();
-    return nullptr;
 }
 
-std::shared_ptr<Value> Visitor::visit(BlockNode *node) {
+void Visitor::visit(BlockNode *node) {
     visit(static_cast<StatementsListNode *>(node->statementsList));
-    return nullptr;
 }
 
-std::shared_ptr<Value> Visitor::visit(AssignmentNode *node) {
+void Visitor::visit(AssignmentNode *node) {
     std::string id = static_cast<LocationNode *>(node->locationNode)->id;
     if (!node->isAlsoDeclaration) {
         for (auto it = symbols.rbegin(); it != symbols.rend(); ++it) {
             auto v = (*it).find(id);
             if (v != (*it).end()) {
-                if (v->second->constant == true) {
+                if (v->second.constant == true) {
                     printf("error: read-only variable '%s' is not assignable, exiting\n", id.c_str());
                     exit(1);
                 }
-                std::shared_ptr<Value> value(callVisitOn(node->value));
+                Value value;
+                callAndGetValueFrom(node->value, value);
                 v->second = value;
-                return nullptr;
+                return;
             }
         }
         printf("error: use of undeclared identifier '%s', exiting\n", id.c_str());
         exit(1);
     } else {
-        std::shared_ptr<Value> value(callVisitOn(node->value));
-        value->constant = !node->isMutable;
+        Value value;
+        callAndGetValueFrom(node->value, value);
+        value.constant = !node->isMutable;
         symbols.back()[id] = value;
     }
-    return nullptr;
 }
 
-std::shared_ptr<Value> Visitor::visit(DeclarationNode *node) {
+void Visitor::visit(DeclarationNode *node) {
     std::string id = static_cast<LocationNode *>(node->locationNode)->id;
-    symbols.back()[id] = std::make_shared<Value>();
-    return nullptr;
+    symbols.back()[id] = Value();
 }
 
-std::shared_ptr<Value> Visitor::visit(PrintNode *node) {
-    std::shared_ptr<Value> value(callVisitOn(node->expr));
-    value->print();
-    return nullptr;
+void Visitor::visit(PrintNode *node) {
+    Value value;
+    callAndGetValueFrom(node->expr, value);
+    value.print();
 }
 
-std::shared_ptr<Value> Visitor::visit(LocationNode *node) {
+void Visitor::visit(LocationNode *node, Value &result) {
     for (auto it = symbols.rbegin(); it != symbols.rend(); ++it) {
         if ((*it).find(node->id) != (*it).end()) {
-            std::shared_ptr<Value> value((*it)[node->id]);
-            if (value->type == ValueType::UNDEFINED) {
+            result = (*it)[node->id];
+            if (result.type == ValueType::UNDEFINED) {
                 printf("error: use of unitialised identifier '%s', exiting\n", node->id.c_str());
                 exit(1);
             }
-            return value;
+            return;
         }
     }
     printf("error: use of undeclared identifier '%s', exiting\n", node->id.c_str());
     exit(1);
-    return nullptr;
 }
 
-std::shared_ptr<Value> Visitor::visit(BinaryExpressionNode *node) {
-    Value value1(callVisitOn(node->expr1));
-    Value value2(callVisitOn(node->expr2));
+void Visitor::visit(BinaryExpressionNode *node, Value &result) {
+    Value value1, value2;
+    callAndGetValueFrom(node->expr1, value1);
+    callAndGetValueFrom(node->expr2, value2);
 
     Operations::performBinary(result, value1, node->op, value2);
-    if (result.type == ValueType::INT) {
-        if (result.data.num >= 0 && result.data.num < 256) {
-            return smallInts[result.data.num];
-        } else if (result.data.num < 0 && result.data.num >= -256) {
-            return smallInts[512 + result.data.num];
-        }
-    } else if (result.type == ValueType::BOOL) {
-        if (result.data.num) {
-            return trueValue;
-        } else {
-            return falseValue;
-        }
-    }
-    return std::make_shared<Value>(result);
+    // if (result.type == ValueType::INT) {
+    //     if (result.data.num >= 0 && result.data.num < 256) {
+    //         return smallInts[result.data.num];
+    //     } else if (result.data.num < 0 && result.data.num >= -256) {
+    //         return smallInts[512 + result.data.num];
+    //     }
+    // } else if (result.type == ValueType::BOOL) {
+    //     if (result.data.num) {
+    //         return trueValue;
+    //     } else {
+    //         return falseValue;
+    //     }
+    // }
+    // return std::make_shared<Value>(result);
 }
 
-std::shared_ptr<Value> Visitor::visit(IntLiteralNode *node) {
-    if (node->value >= 0 && node->value < 256) {
-        return smallInts[node->value];
-    } else if (node->value < 0 && node->value >= -256) {
-        return smallInts[512 + node->value];
-    }
-    return std::make_shared<Value>(node->value);
+void Visitor::visit(IntLiteralNode *node, Value &result) {
+    // if (node->value >= 0 && node->value < 256) {
+    //     return smallInts[node->value];
+    // } else if (node->value < 0 && node->value >= -256) {
+    //     return smallInts[512 + node->value];
+    // }
+    result.set(node->value);
 }
 
-std::shared_ptr<Value> Visitor::visit(FloatLiteralNode *node) {
-        return std::make_shared<Value>(node->value);
+void Visitor::visit(FloatLiteralNode *node, Value &result) {
+    result.set(node->value);
 }
 
-std::shared_ptr<Value> Visitor::visit(BoolLiteralNode *node) {
-    if (node->value) {
-        return trueValue;
-    } else {
-        return falseValue;
-    }
+void Visitor::visit(BoolLiteralNode *node, Value &result) {
+    result.set(node->value);
+    // if (node->value) {
+    //     return trueValue;
+    // } else {
+    //     return falseValue;
+    // }
 }
 
-std::shared_ptr<Value> Visitor::visit(IfNode *node) {
-    std::shared_ptr<Value> expr(callVisitOn(node->condition));
-    if (getBoolValue(expr)) {
-        callVisitOn(node->thenBlock);
+void Visitor::visit(IfNode *node) {
+    Value condition;
+    callAndGetValueFrom(node->condition, condition);
+    if (getBoolValue(condition)) {
+        callVoidVisitOn(node->thenBlock);
     } else if (node->elseBlock) {
-        callVisitOn(node->elseBlock);
+        callVoidVisitOn(node->elseBlock);
     }
-    return nullptr;
 }
 
-std::shared_ptr<Value> Visitor::visit(ForLoopNode *node) {
+void Visitor::visit(ForLoopNode *node) {
     pushNewSymbolFrame();
-    callVisitOn(node->init);
-    std::shared_ptr<Value> condition(callVisitOn(node->condition));
+    callVoidVisitOn(node->init);
+    Value condition;
+    callAndGetValueFrom(node->condition, condition);
     while (getBoolValue(condition)) {
-        callVisitOn(node->body);
-        callVisitOn(node->increment);
-        condition = callVisitOn(node->condition);
+        callVoidVisitOn(node->body);
+        callVoidVisitOn(node->increment);
+        callAndGetValueFrom(node->condition, condition);
     }
     popSymbolFrame();
-    return nullptr;
 }

@@ -3,7 +3,7 @@
 #include "AST.hpp"
 #include "Visitor.hpp"
 
-#define ACCEPT_VISITOR(CLASS) inline std::shared_ptr<Value> CLASS::accept(Visitor *v) { return v->visit(this); }
+#define ACCEPT_VISITOR(CLASS) ;
 
 void ListNode::append(ASTNode *node) {
     list.push_back(node);

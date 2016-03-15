@@ -7,7 +7,7 @@
 #include <string>
 
 class Visitor;
-class Value;
+struct Value;
 
 enum class NodeType {
     STATEMENTS_LIST,
@@ -35,8 +35,7 @@ enum class BinaryOp {
     LOGICAL_OR
 };
 
-#define ACCEPT_VISITOR_DECLARE std::shared_ptr<Value> accept(Visitor *v);
-
+#define ACCEPT_VISITOR_DECLARE ;
 enum class NodeType;
 
 class ASTNode {
