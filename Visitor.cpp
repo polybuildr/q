@@ -1,21 +1,13 @@
 #include <map>
-#include <unordered_map>
 #include <list>
-#include <memory>
 
 #include "Visitor.hpp"
 #include "AST.hpp"
 #include "Value.hpp"
 #include "Utils.cpp"
 
-Value result;
-
-Value smallInts[512];
-Value trueValue;
-Value falseValue;
-
 void Visitor::pushNewSymbolFrame() {
-    std::map<std::string, Value > frame;
+    std::map<std::string, Value> frame;
     symbols.push_back(frame);
 }
 
@@ -24,14 +16,6 @@ void Visitor::popSymbolFrame() {
 }
 
 Visitor::Visitor() {
-    trueValue = Value(true);
-    falseValue = Value(false);
-    for (int i = 0; i < 256; ++i) {
-        smallInts[i] = Value(static_cast<int64_t>(i));
-    }
-    for (int i = 256; i < 512; ++i) {
-        smallInts[i] = Value(static_cast<int64_t>(i - 512));
-    }
     pushNewSymbolFrame();
 }
 
@@ -89,7 +73,7 @@ void Visitor::callVoidVisitOn(ASTNode *node) {
 
 void Visitor::visit(StatementsListNode *node) {
     pushNewSymbolFrame();
-    for (ASTNode *statement : (node->list)) {
+    for (ASTNode *statement: node->list) {
         callVoidVisitOn(statement);
     }
     popSymbolFrame();
@@ -157,28 +141,9 @@ void Visitor::visit(BinaryExpressionNode *node, Value &result) {
     callAndGetValueFrom(node->expr2, value2);
 
     Operations::performBinary(result, value1, node->op, value2);
-    // if (result.type == ValueType::INT) {
-    //     if (result.data.num >= 0 && result.data.num < 256) {
-    //         return smallInts[result.data.num];
-    //     } else if (result.data.num < 0 && result.data.num >= -256) {
-    //         return smallInts[512 + result.data.num];
-    //     }
-    // } else if (result.type == ValueType::BOOL) {
-    //     if (result.data.num) {
-    //         return trueValue;
-    //     } else {
-    //         return falseValue;
-    //     }
-    // }
-    // return std::make_shared<Value>(result);
 }
 
 void Visitor::visit(IntLiteralNode *node, Value &result) {
-    // if (node->value >= 0 && node->value < 256) {
-    //     return smallInts[node->value];
-    // } else if (node->value < 0 && node->value >= -256) {
-    //     return smallInts[512 + node->value];
-    // }
     result.set(node->value);
 }
 
@@ -188,11 +153,6 @@ void Visitor::visit(FloatLiteralNode *node, Value &result) {
 
 void Visitor::visit(BoolLiteralNode *node, Value &result) {
     result.set(node->value);
-    // if (node->value) {
-    //     return trueValue;
-    // } else {
-    //     return falseValue;
-    // }
 }
 
 void Visitor::visit(IfNode *node) {

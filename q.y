@@ -115,7 +115,6 @@ int main(int argc, char* argv[]) {
     } while (!feof(yyin));
 
     Visitor *v = new Visitor();
-    // program->accept(v);
     v->callVoidVisitOn(program);
 
     return 0;

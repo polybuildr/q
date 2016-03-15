@@ -3,7 +3,6 @@
 
 #include <cstdint>
 #include <cinttypes>
-#include <memory>
 
 enum class ValueType { INT, REAL, CHAR, BOOL, UNDEFINED };
 
@@ -20,23 +19,6 @@ struct Value {
     Value() {
         type = ValueType::UNDEFINED;
         constant = false;
-    }
-
-    Value(std::shared_ptr<Value> pv) {
-        constant = false;
-        type = pv->type;
-        switch (type) {
-            case ValueType::INT:
-            case ValueType::BOOL:
-                data.num = pv->data.num;
-                break;
-            case ValueType::REAL:
-                data.dbl = pv->data.dbl;
-                break;
-            default:
-                printf("error: could not construct new Value, exiting\n");
-                exit(1);
-        }
     }
 
     Value(int64_t v) {
@@ -96,17 +78,6 @@ struct Value {
      }
 };
 
-int64_t getIntValue(std::shared_ptr<Value> v) {
-    switch (v->type) {
-        case ValueType::INT:
-            return v->data.num;
-        default:
-            printf("error: cannot get int value, exiting\n");
-            exit(1);
-    }
-    return 0;
-}
-
 int64_t getIntValue(Value v) {
     switch (v.type) {
         case ValueType::INT:
@@ -116,18 +87,6 @@ int64_t getIntValue(Value v) {
             exit(1);
     }
     return 0;
-}
-
-double getDoubleValue(std::shared_ptr<Value> v) {
-    switch (v->type) {
-        case ValueType::INT:
-            return v->data.num;
-        case ValueType::REAL:
-            return v->data.dbl;
-        default:
-            printf("error: cannot get real value, exiting\n");
-            exit(1);
-    }
 }
 
 double getDoubleValue(Value v) {
@@ -140,20 +99,6 @@ double getDoubleValue(Value v) {
             printf("error: cannot get real value, exiting\n");
             exit(1);
     }
-}
-
-bool getBoolValue(std::shared_ptr<Value> v) {
-    switch (v->type) {
-        case ValueType::INT:
-        case ValueType::BOOL:
-            return v->data.num;
-        case ValueType::REAL:
-            return v->data.dbl;
-        default:
-            printf("error: cannot get bool value, exiting\n");
-            exit(1);
-    }
-    return 0;
 }
 
 bool getBoolValue(Value v) {

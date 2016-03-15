@@ -46,7 +46,6 @@ namespace Operations {
                 printf("error: unsupported operand type(s) for -\n");
                 exit(1);
         }
-
     }
 
     void mul(Value &result, Value val1, Value val2) {
@@ -67,7 +66,6 @@ namespace Operations {
                 printf("error: unsupported operand type(s) for *\n");
                 exit(1);
         }
-
     }
 
     void div(Value &result, Value val1, Value val2) {
@@ -95,7 +93,6 @@ namespace Operations {
                 printf("error: unsupported operand type(s) for /\n");
                 exit(1);
         }
-
     }
 
     void lessThan(Value &result, Value val1, Value val2) {
@@ -116,7 +113,6 @@ namespace Operations {
                 printf("error: unsupported operand type(s) for <\n");
                 exit(1);
         }
-
     }
 
     void greaterThan(Value &result, Value val1, Value val2) {
@@ -137,7 +133,6 @@ namespace Operations {
                 printf("error: unsupported operand type(s) for >\n");
                 exit(1);
         }
-
     }
 
     void logicalAnd(Value &result, Value val1, Value val2) {
@@ -149,34 +144,34 @@ namespace Operations {
     }
 
     void performBinary(Value &result, Value value1, BinaryOp op, Value value2) {
-                switch (op) {
-                    case BinaryOp::ADD:
-                        Operations::add(result, value1, value2);
-                        break;
-                    case BinaryOp::SUBTRACT:
-                        Operations::sub(result, value1, value2);
-                        break;
-                    case BinaryOp::MULTIPLY:
-                        Operations::mul(result, value1, value2);
-                        break;
-                    case BinaryOp::DIVIDE:
-                        Operations::div(result, value1, value2);
-                        break;
-                    case BinaryOp::GREATER_THAN:
-                        Operations::greaterThan(result, value1, value2);
-                        break;
-                    case BinaryOp::LESS_THAN:
-                        Operations::lessThan(result, value1, value2);
-                        break;
-                    case BinaryOp::LOGICAL_AND:
-                        Operations::logicalAnd(result, value1, value2);
-                        break;
-                    case BinaryOp::LOGICAL_OR:
-                        Operations::logicalOr(result, value1, value2);
-                        break;
-                    default:
-                        printf("error: undefined binary operation, exiting\n");
-                        exit(1);
-                }
+        switch (op) {
+            case BinaryOp::ADD:
+                Operations::add(result, value1, value2);
+                break;
+            case BinaryOp::SUBTRACT:
+                Operations::sub(result, value1, value2);
+                break;
+            case BinaryOp::MULTIPLY:
+                Operations::mul(result, value1, value2);
+                break;
+            case BinaryOp::DIVIDE:
+                Operations::div(result, value1, value2);
+                break;
+            case BinaryOp::GREATER_THAN:
+                Operations::greaterThan(result, value1, value2);
+                break;
+            case BinaryOp::LESS_THAN:
+                Operations::lessThan(result, value1, value2);
+                break;
+            case BinaryOp::LOGICAL_AND:
+                Operations::logicalAnd(result, value1, value2);
+                break;
+            case BinaryOp::LOGICAL_OR:
+                Operations::logicalOr(result, value1, value2);
+                break;
+            default:
+                printf("error: undefined binary operation, exiting\n");
+                exit(1);
+        }
     }
 };

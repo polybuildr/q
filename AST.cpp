@@ -3,8 +3,6 @@
 #include "AST.hpp"
 #include "Visitor.hpp"
 
-#define ACCEPT_VISITOR(CLASS) ;
-
 void ListNode::append(ASTNode *node) {
     list.push_back(node);
 }
@@ -13,14 +11,10 @@ StatementsListNode::StatementsListNode() {
     nodeType = NodeType::STATEMENTS_LIST;
 }
 
-ACCEPT_VISITOR(StatementsListNode)
-
 BlockNode::BlockNode(ASTNode *statementsList):
 statementsList(statementsList) {
     nodeType = NodeType::BLOCK;
 }
-
-ACCEPT_VISITOR(BlockNode)
 
 AssignmentNode::AssignmentNode(ASTNode *location, ASTNode *val, bool isAlsoDeclaration, bool isMutable):
 locationNode(location),
@@ -30,28 +24,20 @@ isAlsoDeclaration(isAlsoDeclaration) {
     nodeType = NodeType::ASSIGNMENT;
 }
 
-ACCEPT_VISITOR(AssignmentNode)
-
 DeclarationNode::DeclarationNode(ASTNode *location):
 locationNode(location) {
     nodeType = NodeType::DECLARATION;
 }
-
-ACCEPT_VISITOR(DeclarationNode)
 
 PrintNode::PrintNode(ASTNode *expr):
 expr(expr) {
     nodeType = NodeType::PRINT;
 }
 
-ACCEPT_VISITOR(PrintNode)
-
 LocationNode::LocationNode(std::string id):
 id(id) {
     nodeType = NodeType::LOCATION;
 }
-
-ACCEPT_VISITOR(LocationNode)
 
 BinaryExpressionNode::BinaryExpressionNode(ASTNode *expr1, BinaryOp op, ASTNode *expr2):
 expr1(expr1),
@@ -60,28 +46,20 @@ expr2(expr2) {
     nodeType = NodeType::BINARY_EXPR;
 }
 
-ACCEPT_VISITOR(BinaryExpressionNode)
-
 IntLiteralNode::IntLiteralNode(int64_t value):
 value(value) {
     nodeType = NodeType::INT_LITERAL;
 }
-
-ACCEPT_VISITOR(IntLiteralNode)
 
 FloatLiteralNode::FloatLiteralNode(double value):
 value(value) {
     nodeType = NodeType::FLOAT_LITERAL;
 }
 
-ACCEPT_VISITOR(FloatLiteralNode)
-
 BoolLiteralNode::BoolLiteralNode(bool value):
 value(value) {
     nodeType = NodeType::BOOL_LITERAL;
 }
-
-ACCEPT_VISITOR(BoolLiteralNode)
 
 IfNode::IfNode(ASTNode* condition, ASTNode *thenBlock, ASTNode *elseBlock):
 condition(condition),
@@ -90,8 +68,6 @@ elseBlock(elseBlock) {
     nodeType = NodeType::IF;
 };
 
-ACCEPT_VISITOR(IfNode)
-
 ForLoopNode::ForLoopNode(ASTNode *init, ASTNode *condition, ASTNode *increment, ASTNode *body):
 init(init),
 condition(condition),
@@ -99,5 +75,3 @@ increment(increment),
 body(body) {
     nodeType = NodeType::FOR;
 }
-
-ACCEPT_VISITOR(ForLoopNode)
