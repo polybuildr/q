@@ -10,8 +10,7 @@
 
 Value result;
 
-std::unordered_map<int64_t, std::shared_ptr<Value>> allocatedIntegers;
-std::unordered_map<double, std::shared_ptr<Value>> allocatedReals;
+std::shared_ptr<Value> smallInts[512];
 std::shared_ptr<Value> trueValue;
 std::shared_ptr<Value> falseValue;
 
@@ -27,6 +26,12 @@ void Visitor::popSymbolFrame() {
 Visitor::Visitor() {
     trueValue = std::make_shared<Value>(true);
     falseValue = std::make_shared<Value>(false);
+    for (int i = 0; i < 256; ++i) {
+        smallInts[i] = std::make_shared<Value>(static_cast<int64_t>(i));
+    }
+    for (int i = 256; i < 512; ++i) {
+        smallInts[i] = std::make_shared<Value>(static_cast<int64_t>(i - 512));
+    }
     pushNewSymbolFrame();
 }
 
@@ -102,29 +107,27 @@ std::shared_ptr<Value> Visitor::visit(BinaryExpressionNode *node) {
     Value value2(node->expr2->accept(this));
 
     Operations::performBinary(result, value1, node->op, value2);
+    if (result.type == ValueType::INT) {
+        if (result.data.num >= 0 && result.data.num < 256) {
+            return smallInts[result.data.num];
+        } else if (result.data.num < 0 && result.data.num >= -256) {
+            return smallInts[512 + result.data.num];
+        }
+    }
     return std::make_shared<Value>(result);
 }
 
 std::shared_ptr<Value> Visitor::visit(IntLiteralNode *node) {
-    std::shared_ptr<Value> value;
-    auto i = allocatedIntegers.find(node->value);
-    if (i == allocatedIntegers.end()) {
-        value = std::make_shared<Value>(node->value);
-        allocatedIntegers[node->value] = value;
-        return value;
+    if (node->value >= 0 && node->value < 256) {
+        return smallInts[node->value];
+    } else if (node->value < 0 && node->value >= -256) {
+        return smallInts[512 + node->value];
     }
-    return i->second;
+    return std::make_shared<Value>(node->value);
 }
 
 std::shared_ptr<Value> Visitor::visit(FloatLiteralNode *node) {
-    std::shared_ptr<Value> value;
-    auto r = allocatedReals.find(node->value);
-    if (r == allocatedReals.end()) {
-        value = std::make_shared<Value>(node->value);
-        allocatedReals[node->value] = value;
-        return value;
-    }
-    return r->second;
+        return std::make_shared<Value>(node->value);
 }
 
 std::shared_ptr<Value> Visitor::visit(BoolLiteralNode *node) {
