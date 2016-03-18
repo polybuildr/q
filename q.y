@@ -75,7 +75,7 @@ assignment: VAR location '=' expr { $$ = new AssignmentNode($2, $4, true); }
           | CONST location '=' expr { $$ = new AssignmentNode($2, $4, true, false); }
           ;
 
-location: IDENTIFIER { $$ = new LocationNode($1); }
+location: IDENTIFIER { $$ = new LocationNode($1); free($1); }
         ;
 
 printer: '@' expr { $$ = new PrintNode($2); }
