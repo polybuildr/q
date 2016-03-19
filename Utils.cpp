@@ -67,6 +67,16 @@ namespace Operations {
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
                 result.set(getDoubleValue(val1) * getDoubleValue(val2));
                 break;
+            case TYPE_PAIR(ValueType::STRING, ValueType::INT):
+                {
+                    std::string out;
+                    std::string in = static_cast<String *>(val1.data.object)->value;
+                    for (int64_t i = 0; i < getIntValue(val2); ++i) {
+                        out += in;
+                    }
+                    result.set(out);
+                }
+                break;
             default:
                 printf("error: unsupported operand type(s) for *\n");
                 exit(1);
