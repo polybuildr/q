@@ -4,11 +4,14 @@
 #include <cstdint>
 #include <cinttypes>
 
-enum class ValueType { INT, REAL, CHAR, BOOL, UNDEFINED };
+#include "classes/String.hpp"
+
+enum class ValueType { INT, REAL, CHAR, BOOL, STRING, UNDEFINED };
 
 union ValueData {
     int64_t num;
     double  dbl;
+    void *object;
 };
 
 struct Value {
@@ -19,6 +22,33 @@ struct Value {
     Value() {
         type = ValueType::UNDEFINED;
         constant = false;
+    }
+
+    Value(const Value &v) {
+        type = v.type;
+        if (v.type == ValueType::STRING) {
+            data.object = new String(static_cast<String *>(v.data.object)->value);
+        } else {
+            data = v.data;
+        }
+        constant = v.constant;
+    }
+
+    Value& operator=(const Value& v) {
+        type = v.type;
+        if (v.type == ValueType::STRING) {
+            data.object = new String(static_cast<String *>(v.data.object)->value);
+        } else {
+            data = v.data;
+        }
+        constant = v.constant;
+        return *this;
+    }
+
+    ~Value() {
+        if (type == ValueType::STRING) {
+            delete static_cast<String *>(data.object);
+        }
     }
 
     Value(int64_t v) {
@@ -57,6 +87,20 @@ struct Value {
          data.num = v;
      }
 
+     Value(char *v) {
+         constant = false;
+         type = ValueType::STRING;
+         String *s = new String(v);
+         data.object = s;
+     }
+
+     void set(char *v) {
+         constant = false;
+         type = ValueType::STRING;
+         String *s = new String(v);
+         data.object = s;
+     }
+
      void print() {
          switch (type) {
              case ValueType::INT:
@@ -71,6 +115,9 @@ struct Value {
                 } else {
                     printf("false\n");
                 }
+                break;
+            case ValueType::STRING:
+                printf("%s\n", static_cast<String *>(data.object)->value.c_str());
                 break;
             default:
                 printf("error: cannot print, unknown value, exiting\n");

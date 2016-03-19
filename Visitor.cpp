@@ -36,6 +36,9 @@ void Visitor::callAndGetValueFrom(ASTNode *node, Value &result) {
         case NodeType::FLOAT_LITERAL:
             visit(static_cast<FloatLiteralNode *>(node), result);
             break;
+        case NodeType::STRING_LITERAL:
+            visit(static_cast<StringLiteralNode *>(node), result);
+            break;
         default:
             printf("error: unknown node type, exiting\n");
             exit(1);
@@ -152,6 +155,10 @@ void Visitor::visit(FloatLiteralNode *node, Value &result) {
 }
 
 void Visitor::visit(BoolLiteralNode *node, Value &result) {
+    result.set(node->value);
+}
+
+void Visitor::visit(StringLiteralNode *node, Value &result) {
     result.set(node->value);
 }
 

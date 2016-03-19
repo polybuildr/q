@@ -16,6 +16,7 @@ class BinaryExpressionNode;
 class IntLiteralNode;
 class FloatLiteralNode;
 class BoolLiteralNode;
+class StringLiteralNode;
 class IfNode;
 class ForLoopNode;
 
@@ -35,6 +36,7 @@ public:
     void visit(IntLiteralNode *, Value &result);
     void visit(FloatLiteralNode *, Value &result);
     void visit(BoolLiteralNode *, Value &result);
+    void visit(StringLiteralNode *, Value &result);
     void visit(IfNode *);
     void visit(ForLoopNode *);
     Visitor();

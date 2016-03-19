@@ -1,4 +1,5 @@
 #include <memory>
+#include <cstring>
 
 #include "AST.hpp"
 #include "Visitor.hpp"
@@ -59,6 +60,11 @@ value(value) {
 BoolLiteralNode::BoolLiteralNode(bool value):
 value(value) {
     nodeType = NodeType::BOOL_LITERAL;
+}
+
+StringLiteralNode::StringLiteralNode(char *string) {
+    nodeType = NodeType::STRING_LITERAL;
+    value = string;
 }
 
 IfNode::IfNode(ASTNode* condition, ASTNode *thenBlock, ASTNode *elseBlock):

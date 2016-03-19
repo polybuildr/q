@@ -20,6 +20,7 @@ enum class NodeType {
     INT_LITERAL,
     FLOAT_LITERAL,
     BOOL_LITERAL,
+    STRING_LITERAL,
     IF,
     FOR,
 };
@@ -111,6 +112,12 @@ class BoolLiteralNode: public ASTNode {
 public:
     bool value;
     BoolLiteralNode(bool value);
+};
+
+class StringLiteralNode: public ASTNode {
+public:
+    char *value;
+    StringLiteralNode(char *string);
 };
 
 class IfNode: public ASTNode {

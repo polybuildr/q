@@ -34,6 +34,7 @@ StatementsListNode *program;
 %token <ival> INT_LITERAL
 %token <fval> FLOAT_LITERAL
 %token <sval> IDENTIFIER
+%token <sval> STRING_LITERAL
 
 %type <node> statements statement statementElem assignment declaration printer expr location literal block
 
@@ -97,6 +98,7 @@ literal: INT_LITERAL { $$ = new IntLiteralNode($1); }
        | FLOAT_LITERAL { $$ = new FloatLiteralNode($1); }
        | TRUE { $$ = new BoolLiteralNode(true); }
        | FALSE { $$ = new BoolLiteralNode(false); }
+       | STRING_LITERAL { $$ = new StringLiteralNode($1); }
        ;
 %%
 int main(int argc, char* argv[]) {

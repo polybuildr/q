@@ -19,6 +19,7 @@ else                    { autoInsertSemicolon = false; return ELSE; }
 for                     { autoInsertSemicolon = false; return FOR; }
 \&\&                    { autoInsertSemicolon = false; return LOGICAL_AND; }
 \|\|                    { autoInsertSemicolon = false; return LOGICAL_OR; }
+\"(\\.|[^\\"])*\"       { autoInsertSemicolon = true; yylval.sval = strdup(yytext); return STRING_LITERAL; }
 [+-]?[0-9]+             { autoInsertSemicolon = true; yylval.ival = atoll(yytext); return INT_LITERAL; }
 [+-]?[0-9]*\.[0-9]+     { autoInsertSemicolon = true; yylval.fval = atof(yytext); return FLOAT_LITERAL; }
 [@+\-*/={};()<>]        { autoInsertSemicolon = false; return yytext[0]; }
