@@ -101,6 +101,20 @@ struct Value {
          data.object = s;
      }
 
+     Value(std::string v) {
+         constant = false;
+         type = ValueType::STRING;
+         String *s = new String(v);
+         data.object = s;
+     }
+
+     void set(std::string v) {
+         constant = false;
+         type = ValueType::STRING;
+         String *s = new String(v);
+         data.object = s;
+     }
+
      void print() {
          switch (type) {
              case ValueType::INT:

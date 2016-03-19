@@ -22,6 +22,11 @@ namespace Operations {
             case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
                 result.set(getDoubleValue(val1) + getDoubleValue(val2));
                 break;
+            case TYPE_PAIR(ValueType::STRING, ValueType::STRING):
+                result.set(
+                    static_cast<String *>(val1.data.object)->value + static_cast<String *>(val2.data.object)->value
+                );
+                break;
             default:
                 printf("error: unsupported operand type(s) for +\n");
                 exit(1);
