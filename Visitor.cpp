@@ -1,10 +1,12 @@
 #include <map>
 #include <list>
 
+#include "Globals.hpp"
 #include "Visitor.hpp"
 #include "AST.hpp"
 #include "Value.hpp"
 #include "Utils.cpp"
+
 
 void Visitor::pushNewSymbolFrame() {
     std::map<std::string, Value> frame;
@@ -159,7 +161,18 @@ void Visitor::visit(BoolLiteralNode *node, Value &result) {
 }
 
 void Visitor::visit(StringLiteralNode *node, Value &result) {
-    result.set(node->value);
+    String *s = new String(node->value);
+    int idx;
+    if(pool.freeStringsList.empty()) {
+        pool.strings.push_back(std::make_pair(1, s));
+        idx = static_cast<int>(pool.strings.size()) - 1;
+    }
+    else {
+        idx = *(pool.freeStringsList.begin());
+        pool.freeStringsList.pop_front();
+        pool.strings[idx] = std::make_pair(1, s); 
+    }
+    result.set(idx, ValueType::STRING);
 }
 
 void Visitor::visit(IfNode *node) {

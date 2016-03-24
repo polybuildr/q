@@ -1,3 +1,6 @@
+#ifndef STRING_HPP
+#define STRING_HPP
+
 #include <string>
 
 struct String {
@@ -17,3 +20,5 @@ struct String {
         return value.length();
     }
 };
+
+#endif

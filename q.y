@@ -4,6 +4,7 @@
 
 #include "AST.hpp"
 #include "Visitor.hpp"
+#include "Globals.cpp"
 
 extern "C" int yylex();
 extern "C" int yyparse();

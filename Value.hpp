@@ -1,10 +1,11 @@
 #ifndef VALUE_HPP
 #define VALUE_HPP
 
+#include "Globals.hpp"
 #include <cstdint>
 #include <cinttypes>
-
 #include "classes/String.hpp"
+
 
 enum class ValueType { INT, REAL, CHAR, BOOL, STRING, UNDEFINED };
 
@@ -22,32 +23,38 @@ struct Value {
     Value() {
         type = ValueType::UNDEFINED;
         constant = false;
+        printf(".");
     }
 
     Value(const Value &v) {
         type = v.type;
-        if (v.type == ValueType::STRING) {
-            data.object = new String(static_cast<String *>(v.data.object)->value);
-        } else {
-            data = v.data;
-        }
+        data = v.data;
         constant = v.constant;
+        if (type == ValueType::STRING)
+            pool.strings[data.num].first++;
+        printf(".");
     }
 
     Value& operator=(const Value& v) {
         type = v.type;
-        if (v.type == ValueType::STRING) {
-            data.object = new String(static_cast<String *>(v.data.object)->value);
-        } else {
-            data = v.data;
-        }
+        data = v.data;
+        if (type == ValueType::STRING)
+            pool.strings[data.num].first++;
         constant = v.constant;
+        printf(".");
         return *this;
     }
 
     ~Value() {
         if (type == ValueType::STRING) {
-            delete static_cast<String *>(data.object);
+            if(pool.strings[data.num].first == 0) {
+                delete pool.strings[data.num].second;
+                pool.strings[data.num].first = 0;
+                pool.freeStringsList.push_back(data.num);
+            }
+            else {
+                pool.strings[data.num].first--;
+            }
         }
     }
 
@@ -87,32 +94,19 @@ struct Value {
          data.num = v;
      }
 
-     Value(char *v) {
+     Value(int v, ValueType t) {
          constant = false;
          type = ValueType::STRING;
-         String *s = new String(v);
-         data.object = s;
+         // TODO: Handle Other Types
+         data.num = v;
+         printf(".");
      }
 
-     void set(char *v) {
+     void set(int v, ValueType t) {
          constant = false;
          type = ValueType::STRING;
-         String *s = new String(v);
-         data.object = s;
-     }
-
-     Value(std::string v) {
-         constant = false;
-         type = ValueType::STRING;
-         String *s = new String(v);
-         data.object = s;
-     }
-
-     void set(std::string v) {
-         constant = false;
-         type = ValueType::STRING;
-         String *s = new String(v);
-         data.object = s;
+         data.num = v;
+         printf(".");
      }
 
      void print() {
@@ -131,7 +125,7 @@ struct Value {
                 }
                 break;
             case ValueType::STRING:
-                printf("%s\n", static_cast<String *>(data.object)->value.c_str());
+                printf("%s\n", pool.strings[data.num].second->value.c_str());
                 break;
             default:
                 printf("error: cannot print, unknown value, exiting\n");

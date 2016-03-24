@@ -2,8 +2,10 @@
 #include <string>
 #include <memory>
 
+#include "Globals.hpp"
 #include "AST.hpp"
 #include "Value.hpp"
+
 
 #define TYPE_PAIR(t1,t2) ((static_cast<int>(t1) << 4) | static_cast<int>(t2))
 
@@ -23,8 +25,15 @@ namespace Operations {
                 result.set(getDoubleValue(val1) + getDoubleValue(val2));
                 break;
             case TYPE_PAIR(ValueType::STRING, ValueType::STRING):
+                pool.strings.push_back(
+                    std::make_pair(
+                        1, 
+                        new String(pool.strings[val1.data.num].second->value + pool.strings[val2.data.num].second->value)
+                    )
+                );
                 result.set(
-                    static_cast<String *>(val1.data.object)->value + static_cast<String *>(val2.data.object)->value
+                    static_cast<int>(pool.strings.size()) - 1,
+                    ValueType::STRING
                 );
                 break;
             default:
@@ -70,11 +79,15 @@ namespace Operations {
             case TYPE_PAIR(ValueType::STRING, ValueType::INT):
                 {
                     std::string out;
-                    std::string in = static_cast<String *>(val1.data.object)->value;
+                    std::string in = pool.strings[val1.data.num].second->value;
                     for (int64_t i = 0; i < getIntValue(val2); ++i) {
                         out += in;
                     }
-                    result.set(out);
+                    pool.strings.push_back (std::make_pair(1, new String(out)));
+                    result.set(
+                        static_cast<int>(pool.strings.size()) - 1,
+                        ValueType::STRING
+                    );
                 }
                 break;
             default:
