@@ -1,2 +1,3 @@
-var x = "fuck bitches "*2 + " and get money" 
-@ x
+var x = "Hello, "
+var y = "world!"
+@ x + y
