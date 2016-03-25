@@ -23,7 +23,6 @@ struct Value {
     Value() {
         type = ValueType::UNDEFINED;
         constant = false;
-        printf(".");
     }
 
     Value(const Value &v) {
@@ -32,7 +31,6 @@ struct Value {
         constant = v.constant;
         if (type == ValueType::STRING)
             pool.strings[data.num].first++;
-        printf(".");
     }
 
     Value& operator=(const Value& v) {
@@ -41,19 +39,16 @@ struct Value {
         if (type == ValueType::STRING)
             pool.strings[data.num].first++;
         constant = v.constant;
-        printf(".");
         return *this;
     }
 
     ~Value() {
         if (type == ValueType::STRING) {
+            pool.strings[data.num].first--;
             if(pool.strings[data.num].first == 0) {
                 delete pool.strings[data.num].second;
                 pool.strings[data.num].first = 0;
                 pool.freeStringsList.push_back(data.num);
-            }
-            else {
-                pool.strings[data.num].first--;
             }
         }
     }
@@ -99,14 +94,12 @@ struct Value {
          type = ValueType::STRING;
          // TODO: Handle Other Types
          data.num = v;
-         printf(".");
      }
 
      void set(int v, ValueType t) {
          constant = false;
          type = ValueType::STRING;
          data.num = v;
-         printf(".");
      }
 
      void print() {
