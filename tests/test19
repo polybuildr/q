@@ -1,1 +1,7 @@
-@ "NaNa" * 5 + " Batman!"
+var x = "aniket " + "jain"
+if(1)
+{
+	var y = x;
+	@ y;
+}
+@ x

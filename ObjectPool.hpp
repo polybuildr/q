@@ -9,8 +9,7 @@ struct ObjectPool {
     std::vector< std::pair< int, String*> > strings;
     std::list<int> freeStringsList;
     ObjectPool() {
-    	strings.resize(10000);
-    	for(int i=0;i<10000;i++) freeStringsList.push_back(i);
+    	strings.reserve(10000);
     }
 };
 
