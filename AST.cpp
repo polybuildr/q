@@ -18,11 +18,12 @@ statementsList(statementsList) {
     nodeType = NodeType::BLOCK;
 }
 
-AssignmentNode::AssignmentNode(ASTNode *location, ASTNode *val, bool isAlsoDeclaration, bool isMutable):
+AssignmentNode::AssignmentNode(ASTNode *location, AssignOp op, ASTNode *val, bool isAlsoDeclaration, bool isMutable):
 locationNode(location),
 value(val),
+isAlsoDeclaration(isAlsoDeclaration),
 isMutable(isMutable),
-isAlsoDeclaration(isAlsoDeclaration) {
+op(op) {
     nodeType = NodeType::ASSIGNMENT;
 }
 
@@ -43,8 +44,8 @@ id(id) {
 
 BinaryExpressionNode::BinaryExpressionNode(ASTNode *expr1, BinaryOp op, ASTNode *expr2):
 expr1(expr1),
-op(op),
-expr2(expr2) {
+expr2(expr2),
+op(op) {
     nodeType = NodeType::BINARY_EXPR;
 }
 

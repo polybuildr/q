@@ -1,0 +1,4 @@
+var s = "Hello, "
+s += "world!"
+s *= 2
+@ s

@@ -36,7 +36,13 @@ enum class BinaryOp {
     LOGICAL_OR,
 };
 
-enum class NodeType;
+enum class AssignOp {
+    SIMPLE,
+    COMPOUND_SUM,
+    COMPOUND_DIFFERENCE,
+    COMPOUND_PRODUCT,
+    COMPOUND_QUOTIENT,
+};
 
 class ASTNode {
 public:
@@ -67,7 +73,8 @@ public:
     ASTNode *value;
     bool isAlsoDeclaration;
     bool isMutable;
-    AssignmentNode(ASTNode *location, ASTNode *val, bool isAlsoDeclaration = false, bool isMutable = true);
+    AssignOp op;
+    AssignmentNode(ASTNode *location, AssignOp op, ASTNode *val, bool isAlsoDeclaration = false, bool isMutable = true);
 };
 
 class DeclarationNode: public ASTNode {

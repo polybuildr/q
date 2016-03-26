@@ -99,7 +99,40 @@ void Visitor::visit(AssignmentNode *node) {
                     printf("error: read-only variable '%s' is not assignable, exiting\n", id.c_str());
                     exit(1);
                 }
-                v->second = callAndGetValueFrom(node->value);
+                switch (node->op) {
+                    case AssignOp::SIMPLE:
+                        v->second = callAndGetValueFrom(node->value);
+                        break;
+                    case AssignOp::COMPOUND_SUM:
+                        v->second = Operations::performBinary(
+                            v->second,
+                            BinaryOp::ADD,
+                            callAndGetValueFrom(node->value)
+                        );
+                        break;
+                    case AssignOp::COMPOUND_DIFFERENCE:
+                        v->second = Operations::performBinary(
+                            v->second,
+                            BinaryOp::SUBTRACT,
+                            callAndGetValueFrom(node->value)
+                        );
+                        break;
+                    case AssignOp::COMPOUND_PRODUCT:
+                        v->second = Operations::performBinary(
+                            v->second,
+                            BinaryOp::MULTIPLY,
+                            callAndGetValueFrom(node->value)
+                        );
+                        break;
+                    case AssignOp::COMPOUND_QUOTIENT:
+                        v->second = Operations::performBinary(
+                            v->second,
+                            BinaryOp::DIVIDE,
+                            callAndGetValueFrom(node->value)
+                        );
+                        break;
+                }
+
                 return;
             }
         }

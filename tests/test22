@@ -1,0 +1,2 @@
+var s = "Hello, world! " * 10000
+@ s

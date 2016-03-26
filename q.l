@@ -17,6 +17,10 @@ const                   { autoInsertSemicolon = false; return CONST; }
 if                      { autoInsertSemicolon = false; return IF; }
 else                    { autoInsertSemicolon = false; return ELSE; }
 for                     { autoInsertSemicolon = false; return FOR; }
+\+=                     { autoInsertSemicolon = false; return PLUS_ASSIGN; }
+-=                      { autoInsertSemicolon = false; return MINUS_ASSIGN; }
+\*=                     { autoInsertSemicolon = false; return PRODUCT_ASSIGN; }
+\/=                     { autoInsertSemicolon = false; return QUOTIENT_ASSIGN; }
 \&\&                    { autoInsertSemicolon = false; return LOGICAL_AND; }
 \|\|                    { autoInsertSemicolon = false; return LOGICAL_OR; }
 \"(\\.|[^\\"])*\"       { autoInsertSemicolon = true; char *s = yytext + 1; s[yyleng - 2] = '\0'; yylval.sval = strdup(s); return STRING_LITERAL; }

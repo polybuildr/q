@@ -21,6 +21,7 @@ StatementsListNode *program;
     double fval;
     char *sval;
     ASTNode *node;
+    AssignOp assignOp;
 }
 
 %token TRUE
@@ -31,6 +32,10 @@ StatementsListNode *program;
 %token CONST
 %token IF
 %token FOR
+%token PLUS_ASSIGN
+%token MINUS_ASSIGN
+%token PRODUCT_ASSIGN
+%token QUOTIENT_ASSIGN
 
 %token <ival> INT_LITERAL
 %token <fval> FLOAT_LITERAL
@@ -38,11 +43,13 @@ StatementsListNode *program;
 %token <sval> STRING_LITERAL
 
 %type <node> statements statement statementElem assignment declaration printer expr location literal block
+%type <assignOp> assignOp
 
+%left LOGICAL_OR
+%left LOGICAL_AND
 %left '<' '>'
 %left '-' '+'
 %left '*' '/'
-%left LOGICAL_OR LOGICAL_AND
 
 %right "then" ELSE
 
@@ -72,10 +79,17 @@ block: '{' statements '}' { $$ = new BlockNode($2); }
 declaration: VAR location { $$ = new DeclarationNode($2); }
            ;
 
-assignment: VAR location '=' expr { $$ = new AssignmentNode($2, $4, true); }
-          | location '=' expr { $$ = new AssignmentNode($1, $3); }
-          | CONST location '=' expr { $$ = new AssignmentNode($2, $4, true, false); }
+assignment: VAR location assignOp expr { $$ = new AssignmentNode($2, $3, $4, true); }
+          | location assignOp expr { $$ = new AssignmentNode($1, $2, $3); }
+          | CONST location assignOp expr { $$ = new AssignmentNode($2, $3, $4, true, false); }
           ;
+
+assignOp: '=' { $$ = AssignOp::SIMPLE; }
+        | PLUS_ASSIGN { $$ = AssignOp::COMPOUND_SUM; }
+        | MINUS_ASSIGN { $$ = AssignOp::COMPOUND_DIFFERENCE; }
+        | PRODUCT_ASSIGN { $$ = AssignOp::COMPOUND_PRODUCT; }
+        | QUOTIENT_ASSIGN { $$ = AssignOp::COMPOUND_QUOTIENT; }
+        ;
 
 location: IDENTIFIER { $$ = new LocationNode($1); free($1); }
         ;
