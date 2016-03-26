@@ -46,6 +46,7 @@ struct Value {
         if (type == ValueType::STRING) {
             pool.strings[data.num].first--;
             if (pool.strings[data.num].first == 0) {
+                printf("~(%s)\n", pool.strings[data.num].second->value.c_str());
                 delete pool.strings[data.num].second;
                 pool.strings[data.num].first = 0;
                 pool.freeStringsList.push_back(data.num);
@@ -100,6 +101,23 @@ struct Value {
         constant = false;
         type = ValueType::STRING;
         data.num = v;
+    }
+
+    Value(std::string v) {
+        String *s = new String(v);
+        int idx;
+        if (pool.freeStringsList.empty()) {
+            pool.strings.push_back(std::make_pair(1, s));
+            idx = static_cast<int>(pool.strings.size()) - 1;
+        }
+        else {
+            idx = *(pool.freeStringsList.begin());
+            pool.freeStringsList.pop_front();
+            pool.strings[idx] = std::make_pair(1, s);
+        }
+        constant = false;
+        type = ValueType::STRING;
+        data.num = idx;
     }
 
     void set(std::string v) {

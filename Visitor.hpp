@@ -34,19 +34,19 @@ public:
     void visit(AssignmentNode *);
     void visit(DeclarationNode *);
     void visit(PrintNode *);
-    void visit(LocationNode *, Value &result);
-    void visit(BinaryExpressionNode *, Value &result);
-    void visit(IntLiteralNode *, Value &result);
-    void visit(FloatLiteralNode *, Value &result);
-    void visit(BoolLiteralNode *, Value &result);
-    void visit(StringLiteralNode *, Value &result);
+    Value visit(LocationNode *);
+    Value visit(BinaryExpressionNode *);
+    Value visit(IntLiteralNode *);
+    Value visit(FloatLiteralNode *);
+    Value visit(BoolLiteralNode *);
+    Value visit(StringLiteralNode *);
     void visit(IfNode *);
     void visit(ForLoopNode *);
     Visitor();
     void pushNewSymbolFrame();
     void popSymbolFrame();
     void callVoidVisitOn(ASTNode *);
-    void callAndGetValueFrom(ASTNode *, Value &result);
+    Value callAndGetValueFrom(ASTNode *);
 };
 
 #endif

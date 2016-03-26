@@ -22,25 +22,25 @@ Visitor::Visitor() {
     pushNewSymbolFrame();
 }
 
-void Visitor::callAndGetValueFrom(ASTNode *node, Value &result) {
+Value Visitor::callAndGetValueFrom(ASTNode *node) {
     switch (node->nodeType) {
         case NodeType::LOCATION:
-            visit(static_cast<LocationNode *>(node), result);
+            return visit(static_cast<LocationNode *>(node));
             break;
         case NodeType::BINARY_EXPR:
-            visit(static_cast<BinaryExpressionNode *>(node), result);
+            return visit(static_cast<BinaryExpressionNode *>(node));
             break;
         case NodeType::INT_LITERAL:
-            visit(static_cast<IntLiteralNode *>(node), result);
+            return visit(static_cast<IntLiteralNode *>(node));
             break;
         case NodeType::BOOL_LITERAL:
-            visit(static_cast<BoolLiteralNode *>(node), result);
+            return visit(static_cast<BoolLiteralNode *>(node));
             break;
         case NodeType::FLOAT_LITERAL:
-            visit(static_cast<FloatLiteralNode *>(node), result);
+            return visit(static_cast<FloatLiteralNode *>(node));
             break;
         case NodeType::STRING_LITERAL:
-            visit(static_cast<StringLiteralNode *>(node), result);
+            return visit(static_cast<StringLiteralNode *>(node));
             break;
         default:
             printf("error: unknown node type, exiting\n");
@@ -99,17 +99,14 @@ void Visitor::visit(AssignmentNode *node) {
                     printf("error: read-only variable '%s' is not assignable, exiting\n", id.c_str());
                     exit(1);
                 }
-                Value value;
-                callAndGetValueFrom(node->value, value);
-                v->second = value;
+                v->second = callAndGetValueFrom(node->value);
                 return;
             }
         }
         printf("error: use of undeclared identifier '%s', exiting\n", id.c_str());
         exit(1);
     } else {
-        Value value;
-        callAndGetValueFrom(node->value, value);
+        Value value = callAndGetValueFrom(node->value);
         value.constant = !node->isMutable;
         symbols.back()[id] = value;
     }
@@ -121,53 +118,51 @@ void Visitor::visit(DeclarationNode *node) {
 }
 
 void Visitor::visit(PrintNode *node) {
-    Value value;
-    callAndGetValueFrom(node->expr, value);
+    Value value = callAndGetValueFrom(node->expr);
     value.print();
 }
 
-void Visitor::visit(LocationNode *node, Value &result) {
+Value Visitor::visit(LocationNode *node) {
     for (auto it = symbols.rbegin(); it != symbols.rend(); ++it) {
         if ((*it).find(node->id) != (*it).end()) {
-            result = (*it)[node->id];
+            Value result = (*it)[node->id];
             if (result.type == ValueType::UNDEFINED) {
                 printf("error: use of unitialised identifier '%s', exiting\n", node->id.c_str());
                 exit(1);
             }
-            return;
+            return result;
         }
     }
     printf("error: use of undeclared identifier '%s', exiting\n", node->id.c_str());
     exit(1);
 }
 
-void Visitor::visit(BinaryExpressionNode *node, Value &result) {
-    Value value1, value2;
-    callAndGetValueFrom(node->expr1, value1);
-    callAndGetValueFrom(node->expr2, value2);
-
-    Operations::performBinary(result, value1, node->op, value2);
+Value Visitor::visit(BinaryExpressionNode *node) {
+    return Operations::performBinary(
+        callAndGetValueFrom(node->expr1),
+        node->op,
+        callAndGetValueFrom(node->expr2)
+    );
 }
 
-void Visitor::visit(IntLiteralNode *node, Value &result) {
-    result.set(node->value);
+Value Visitor::visit(IntLiteralNode *node) {
+    return Value(node->value);
 }
 
-void Visitor::visit(FloatLiteralNode *node, Value &result) {
-    result.set(node->value);
+Value Visitor::visit(FloatLiteralNode *node) {
+    return Value(node->value);
 }
 
-void Visitor::visit(BoolLiteralNode *node, Value &result) {
-    result.set(node->value);
+Value Visitor::visit(BoolLiteralNode *node) {
+    return Value(node->value);
 }
 
-void Visitor::visit(StringLiteralNode *node, Value &result) {
-    result.set(std::string(node->value));
+Value Visitor::visit(StringLiteralNode *node) {
+    return Value(std::string(node->value));
 }
 
 void Visitor::visit(IfNode *node) {
-    Value condition;
-    callAndGetValueFrom(node->condition, condition);
+    Value condition = callAndGetValueFrom(node->condition);
     if (getBoolValue(condition)) {
         callVoidVisitOn(node->thenBlock);
     } else if (node->elseBlock) {
@@ -178,12 +173,11 @@ void Visitor::visit(IfNode *node) {
 void Visitor::visit(ForLoopNode *node) {
     pushNewSymbolFrame();
     callVoidVisitOn(node->init);
-    Value condition;
-    callAndGetValueFrom(node->condition, condition);
+    Value condition = callAndGetValueFrom(node->condition);
     while (getBoolValue(condition)) {
         callVoidVisitOn(node->body);
         callVoidVisitOn(node->increment);
-        callAndGetValueFrom(node->condition, condition);
+        condition = callAndGetValueFrom(node->condition);
     }
     popSymbolFrame();
 }
