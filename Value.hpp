@@ -42,7 +42,7 @@ struct Value {
         return *this;
     }
 
-        Value() {
+    ~Value() {
         if (type == ValueType::STRING) {
             pool.strings[data.num].first--;
             if (pool.strings[data.num].first == 0) {
@@ -100,6 +100,23 @@ struct Value {
         constant = false;
         type = ValueType::STRING;
         data.num = v;
+    }
+
+    void set(std::string v) {
+        String *s = new String(v);
+        int idx;
+        if (pool.freeStringsList.empty()) {
+            pool.strings.push_back(std::make_pair(1, s));
+            idx = static_cast<int>(pool.strings.size()) - 1;
+        }
+        else {
+            idx = *(pool.freeStringsList.begin());
+            pool.freeStringsList.pop_front();
+            pool.strings[idx] = std::make_pair(1, s);
+        }
+        constant = false;
+        type = ValueType::STRING;
+        data.num = idx;
     }
 
     void print() {

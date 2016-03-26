@@ -25,16 +25,7 @@ namespace Operations {
                 result.set(getDoubleValue(val1) + getDoubleValue(val2));
                 break;
             case TYPE_PAIR(ValueType::STRING, ValueType::STRING):
-                pool.strings.push_back(
-                    std::make_pair(
-                        1,
-                        new String(pool.strings[val1.data.num].second->value + pool.strings[val2.data.num].second->value)
-                    )
-                );
-                result.set(
-                    static_cast<int>(pool.strings.size()) - 1,
-                    ValueType::STRING
-                );
+                result.set(pool.strings[val1.data.num].second->value + pool.strings[val2.data.num].second->value);
                 break;
             default:
                 printf("error: unsupported operand type(s) for +\n");
@@ -83,11 +74,7 @@ namespace Operations {
                     for (int64_t i = 0; i < getIntValue(val2); ++i) {
                         out += in;
                     }
-                    pool.strings.push_back (std::make_pair(1, new String(out)));
-                    result.set(
-                        static_cast<int>(pool.strings.size()) - 1,
-                        ValueType::STRING
-                    );
+                    result.set(out);
                 }
                 break;
             default:
