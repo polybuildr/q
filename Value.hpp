@@ -42,7 +42,7 @@ struct Value {
         return *this;
     }
 
-    ~Value() {
+        Value() {
         if (type == ValueType::STRING) {
             pool.strings[data.num].first--;
             if (pool.strings[data.num].first == 0) {
@@ -65,46 +65,46 @@ struct Value {
         data.num = v;
     }
 
-     Value(double v) {
-         constant = false;
-         type = ValueType::REAL;
-         data.dbl = v;
-     }
+    Value(double v) {
+        constant = false;
+        type = ValueType::REAL;
+        data.dbl = v;
+    }
 
-     void set(double v) {
-         constant = false;
-         type = ValueType::REAL;
-         data.dbl = v;
-     }
+    void set(double v) {
+        constant = false;
+        type = ValueType::REAL;
+        data.dbl = v;
+    }
 
-     Value(bool v) {
-         constant = false;
-         type = ValueType::BOOL;
-         data.num = v;
-     }
+    Value(bool v) {
+        constant = false;
+        type = ValueType::BOOL;
+        data.num = v;
+    }
 
-     void set(bool v) {
-         constant = false;
-         type = ValueType::BOOL;
-         data.num = v;
-     }
+    void set(bool v) {
+        constant = false;
+        type = ValueType::BOOL;
+        data.num = v;
+    }
 
-     Value(int v, ValueType t) {
-         constant = false;
-         type = ValueType::STRING;
-         // TODO: Handle Other Types
-         data.num = v;
-     }
+    Value(int v, ValueType t) {
+        constant = false;
+        type = ValueType::STRING;
+        // TODO: Handle Other Types
+        data.num = v;
+    }
 
-     void set(int v, ValueType t) {
-         constant = false;
-         type = ValueType::STRING;
-         data.num = v;
-     }
+    void set(int v, ValueType t) {
+        constant = false;
+        type = ValueType::STRING;
+        data.num = v;
+    }
 
-     void print() {
-         switch (type) {
-             case ValueType::INT:
+    void print() {
+        switch (type) {
+            case ValueType::INT:
                 printf("%" PRId64 "\n", data.num);
                 break;
             case ValueType::REAL:
@@ -122,8 +122,8 @@ struct Value {
                 break;
             default:
                 printf("error: cannot print, unknown value, exiting\n");
-         }
-     }
+        }
+    }
 };
 
 int64_t getIntValue(Value v) {
