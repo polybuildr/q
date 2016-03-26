@@ -27,7 +27,7 @@ namespace Operations {
             case TYPE_PAIR(ValueType::STRING, ValueType::STRING):
                 pool.strings.push_back(
                     std::make_pair(
-                        1, 
+                        1,
                         new String(pool.strings[val1.data.num].second->value + pool.strings[val2.data.num].second->value)
                     )
                 );

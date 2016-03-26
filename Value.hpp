@@ -45,7 +45,7 @@ struct Value {
     ~Value() {
         if (type == ValueType::STRING) {
             pool.strings[data.num].first--;
-            if(pool.strings[data.num].first == 0) {
+            if (pool.strings[data.num].first == 0) {
                 delete pool.strings[data.num].second;
                 pool.strings[data.num].first = 0;
                 pool.freeStringsList.push_back(data.num);

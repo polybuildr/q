@@ -9,7 +9,7 @@ struct ObjectPool {
     std::vector< std::pair< int, String*> > strings;
     std::list<int> freeStringsList;
     ObjectPool() {
-    	strings.reserve(10000);
+        strings.reserve(10000);
     }
 };
 
