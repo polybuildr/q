@@ -99,9 +99,6 @@ void Visitor::visit(AssignmentNode *node) {
                     printf("error: read-only variable '%s' is not assignable, exiting\n", id.c_str());
                     exit(1);
                 }
-                if (v->second.type == ValueType::STRING) {
-                    pool.strings[v->second.data.num].first--;
-                }
                 v->second = callAndGetValueFrom(node->value);
                 return;
             }

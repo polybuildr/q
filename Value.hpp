@@ -34,6 +34,9 @@ struct Value {
     }
 
     Value& operator=(const Value& v) {
+        if (type == ValueType::STRING) {
+            handleStringRefCount();
+        }
         type = v.type;
         data = v.data;
         if (type == ValueType::STRING)
@@ -42,16 +45,19 @@ struct Value {
         return *this;
     }
 
-    ~Value() {
-        if (type == ValueType::STRING) {
+    void handleStringRefCount() {
+        if (type == ValueType::STRING) { // just in case
             pool.strings[data.num].first--;
             if (pool.strings[data.num].first == 0) {
-                printf("~(%s)\n", pool.strings[data.num].second->value.c_str());
                 delete pool.strings[data.num].second;
                 pool.strings[data.num].first = 0;
                 pool.freeStringsList.push_back(data.num);
             }
         }
+    }
+
+    ~Value() {
+        handleStringRefCount();
     }
 
     Value(int64_t v) {
