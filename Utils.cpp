@@ -2,10 +2,8 @@
 #include <string>
 #include <memory>
 
-#include "Globals.hpp"
 #include "AST.hpp"
 #include "Value.hpp"
-
 
 #define TYPE_PAIR(t1,t2) ((static_cast<int>(t1) << 4) | static_cast<int>(t2))
 
@@ -25,7 +23,7 @@ namespace Operations {
                 return Value(getDoubleValue(val1) + getDoubleValue(val2));
                 break;
             case TYPE_PAIR(ValueType::STRING, ValueType::STRING):
-                return Value(pool.strings[val1.data.num].second->value + pool.strings[val2.data.num].second->value);
+                return Value(getStringValue(val1) + getStringValue(val2));
                 break;
             default:
                 printf("error: unsupported operand type(s) for +\n");
@@ -70,7 +68,7 @@ namespace Operations {
             case TYPE_PAIR(ValueType::STRING, ValueType::INT):
                 {
                     std::string out;
-                    std::string in = pool.strings[val1.data.num].second->value;
+                    std::string in = getStringValue(val1);
                     for (int64_t i = 0; i < getIntValue(val2); ++i) {
                         out += in;
                     }

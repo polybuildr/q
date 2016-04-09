@@ -2,12 +2,10 @@
 #include <list>
 #include <iostream>
 
-#include "Globals.hpp"
 #include "Visitor.hpp"
 #include "AST.hpp"
 #include "Value.hpp"
 #include "Utils.cpp"
-
 
 void Visitor::pushNewSymbolFrame() {
     std::map<std::string, Value> frame;

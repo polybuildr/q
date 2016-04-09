@@ -155,4 +155,14 @@ bool getBoolValue(Value v) {
     return 0;
 }
 
+std::string getStringValue(Value v) {
+    switch (v.type) {
+        case ValueType::STRING:
+            return pool.strings[v.data.num].second->value;
+        default:
+            printf("error: cannot get string value, exiting\n");
+            exit(1);
+    }
+}
+
 #endif

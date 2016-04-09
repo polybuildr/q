@@ -1,7 +1,6 @@
 #include <memory>
 #include <cstring>
 
-#include "Globals.hpp"
 #include "AST.hpp"
 #include "Visitor.hpp"
 
