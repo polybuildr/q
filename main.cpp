@@ -1,7 +1,6 @@
 #include <cstdio>
 #include <cstdint>
 
-#include "Globals.hpp"
 #include "AST.hpp"
 #include "Visitor.hpp"
 
