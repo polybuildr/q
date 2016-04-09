@@ -118,7 +118,7 @@ struct Value {
     }
 };
 
-int64_t getIntValue(Value v) {
+inline int64_t getIntValue(Value v) {
     switch (v.type) {
         case ValueType::INT:
             return v.data.num;
@@ -129,7 +129,7 @@ int64_t getIntValue(Value v) {
     return 0;
 }
 
-double getDoubleValue(Value v) {
+inline double getDoubleValue(Value v) {
     switch (v.type) {
         case ValueType::INT:
             return v.data.num;
@@ -141,7 +141,7 @@ double getDoubleValue(Value v) {
     }
 }
 
-bool getBoolValue(Value v) {
+inline bool getBoolValue(Value v) {
     switch (v.type) {
         case ValueType::INT:
         case ValueType::BOOL:
@@ -155,7 +155,7 @@ bool getBoolValue(Value v) {
     return 0;
 }
 
-std::string getStringValue(Value v) {
+inline std::string getStringValue(Value v) {
     switch (v.type) {
         case ValueType::STRING:
             return pool.strings[v.data.num].second->value;
