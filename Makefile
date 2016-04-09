@@ -7,5 +7,6 @@ q.tab.c: q.y
 lex.yy.c: q.l
 	flex -o lex.yy.c q.l
 
+.PHONY: clean
 clean:
 	rm -f lex.yy.c q.tab.c q.tab.h
