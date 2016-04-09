@@ -1,18 +1,17 @@
 #ifndef VALUE_HPP
 #define VALUE_HPP
 
-#include "Globals.hpp"
 #include <cstdint>
 #include <cinttypes>
-#include "classes/String.hpp"
 
+#include "Globals.hpp"
+#include "classes/String.hpp"
 
 enum class ValueType { INT, REAL, CHAR, BOOL, STRING, UNDEFINED };
 
 union ValueData {
     int64_t num;
     double  dbl;
-    void *object;
 };
 
 struct Value {
@@ -66,19 +65,7 @@ struct Value {
         data.num = v;
     }
 
-    void set(int64_t v) {
-        constant = false;
-        type = ValueType::INT;
-        data.num = v;
-    }
-
     Value(double v) {
-        constant = false;
-        type = ValueType::REAL;
-        data.dbl = v;
-    }
-
-    void set(double v) {
         constant = false;
         type = ValueType::REAL;
         data.dbl = v;
@@ -90,43 +77,7 @@ struct Value {
         data.num = v;
     }
 
-    void set(bool v) {
-        constant = false;
-        type = ValueType::BOOL;
-        data.num = v;
-    }
-
-    Value(int v, ValueType t) {
-        constant = false;
-        type = ValueType::STRING;
-        // TODO: Handle Other Types
-        data.num = v;
-    }
-
-    void set(int v, ValueType t) {
-        constant = false;
-        type = ValueType::STRING;
-        data.num = v;
-    }
-
     Value(std::string v) {
-        String *s = new String(v);
-        int idx;
-        if (pool.freeStringsList.empty()) {
-            pool.strings.push_back(std::make_pair(1, s));
-            idx = static_cast<int>(pool.strings.size()) - 1;
-        }
-        else {
-            idx = *(pool.freeStringsList.begin());
-            pool.freeStringsList.pop_front();
-            pool.strings[idx] = std::make_pair(1, s);
-        }
-        constant = false;
-        type = ValueType::STRING;
-        data.num = idx;
-    }
-
-    void set(std::string v) {
         String *s = new String(v);
         int idx;
         if (pool.freeStringsList.empty()) {

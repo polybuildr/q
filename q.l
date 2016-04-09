@@ -7,7 +7,6 @@
 
 // TODO: int parenLevel = 0;
 bool autoInsertSemicolon = true;
-using namespace std;
 %}
 %%
 true                    { autoInsertSemicolon = true; return TRUE; }

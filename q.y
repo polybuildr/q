@@ -11,7 +11,6 @@ extern "C" int yyparse();
 void yyerror(const char *s);
 
 extern "C" FILE *yyin;
-using namespace std;
 
 StatementsListNode *program;
 %}
