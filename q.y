@@ -1,10 +1,5 @@
 %{
-#include <cstdio>
-#include <cstdint>
-
 #include "AST.hpp"
-#include "Visitor.hpp"
-#include "Globals.cpp"
 
 extern "C" int yylex();
 extern "C" int yyparse();
@@ -115,28 +110,3 @@ literal: INT_LITERAL { $$ = new IntLiteralNode($1); }
        | STRING_LITERAL { $$ = new StringLiteralNode($1); }
        ;
 %%
-int main(int argc, char* argv[]) {
-    if (argc < 2) {
-        printf("usage: q FILE\n");
-        exit(1);
-    }
-    FILE *inputFile = fopen(argv[1], "r");
-    if (!inputFile) {
-        printf("error: could not open \"%s\"\n", argv[1]);
-        exit(1);
-    }
-    yyin = inputFile;
-    do {
-        yyparse();
-    } while (!feof(yyin));
-
-    Visitor *v = new Visitor();
-    v->callVoidVisitOn(program);
-
-    return 0;
-}
-
-void yyerror(const char *s) {
-    printf("ERROR! Exiting.\n");
-    exit(1);
-}

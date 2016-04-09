@@ -5,7 +5,6 @@
 #include <vector>
 #include <map>
 
-#include "Globals.hpp"
 #include "classes/String.hpp"
 
 class ASTNode;
