@@ -1,8 +1,8 @@
 #include <cstdio>
 #include <cstdint>
 
-#include "AST.hpp"
-#include "Visitor.hpp"
+#include "frontend/AST.hpp"
+#include "runtime/Visitor.hpp"
 
 extern "C" int yylex();
 extern "C" int yyparse();

@@ -1,5 +1,5 @@
 %{
-#include "AST.hpp"
+#include "frontend/AST.hpp"
 
 extern "C" int yylex();
 extern "C" int yyparse();

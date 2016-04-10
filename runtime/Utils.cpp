@@ -2,7 +2,7 @@
 #include <string>
 #include <memory>
 
-#include "AST.hpp"
+#include "frontend/AST.hpp"
 #include "Value.hpp"
 
 #define TYPE_PAIR(t1,t2) ((static_cast<int>(t1) << 4) | static_cast<int>(t2))

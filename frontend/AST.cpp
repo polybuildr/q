@@ -2,7 +2,7 @@
 #include <cstring>
 
 #include "AST.hpp"
-#include "Visitor.hpp"
+#include "runtime/Visitor.hpp"
 
 void ListNode::append(ASTNode *node) {
     list.push_back(node);

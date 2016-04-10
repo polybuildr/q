@@ -1,12 +1,12 @@
-q: q.tab.c lex.yy.c AST.cpp AST.hpp Visitor.cpp Visitor.hpp Value.hpp Utils.cpp ObjectPool.hpp Globals.hpp Globals.cpp
-	clang++ -g -O2 -Wno-deprecated-register -std=c++11 Globals.cpp main.cpp Visitor.cpp AST.cpp -x c++ q.tab.c -x c++ lex.yy.c -lfl -o q
+q: build/q.tab.c build/lex.yy.c frontend/AST.cpp runtime/Visitor.cpp runtime/Value.hpp runtime/Utils.cpp runtime/Globals.cpp
+	clang++ -g -O2 -I. -Wno-deprecated-register -std=c++11 runtime/Globals.cpp main.cpp runtime/Visitor.cpp frontend/AST.cpp -x c++ build/q.tab.c -x c++ build/lex.yy.c -lfl -o build/q
 
-q.tab.c: q.y
-	bison -d q.y
+build/q.tab.c: frontend/q.y
+	bison frontend/q.y --defines=build/q.tab.h -o build/q.tab.c
 
-lex.yy.c: q.l
-	flex -o lex.yy.c q.l
+build/lex.yy.c: frontend/q.l
+	flex -o build/lex.yy.c frontend/q.l
 
 .PHONY: clean
 clean:
-	rm -f lex.yy.c q.tab.c q.tab.h
+	rm -f build/*

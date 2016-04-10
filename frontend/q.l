@@ -1,8 +1,8 @@
 %{
 #include <cstdio>
 
-#include "AST.hpp"
-#include "q.tab.h"
+#include "frontend/AST.hpp"
+#include "build/q.tab.h"
 #define YY_DECL extern "C" int yylex()
 
 // TODO: int parenLevel = 0;
