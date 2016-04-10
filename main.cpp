@@ -9,6 +9,8 @@ extern "C" int yyparse();
 void yyerror(const char *s);
 
 extern "C" FILE *yyin;
+extern "C" int lexerLineNumber;
+extern "C" int lexerColumnNumber;
 
 extern StatementsListNode *program;
 
@@ -34,6 +36,6 @@ int main(int argc, char* argv[]) {
 }
 
 void yyerror(const char *s) {
-    printf("ERROR! Exiting.\n");
+    fprintf(stderr, "error: could not parse program\nlocation guess: line %d, column %d\n", lexerLineNumber, lexerColumnNumber);
     exit(1);
 }
