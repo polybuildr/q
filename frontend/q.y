@@ -30,6 +30,8 @@ StatementsListNode *program;
 %token MINUS_ASSIGN
 %token PRODUCT_ASSIGN
 %token QUOTIENT_ASSIGN
+%token LESS_THAN_OR_EQUAL
+%token GREATER_THAN_OR_EQUAL
 
 %token <ival> INT_LITERAL
 %token <fval> FLOAT_LITERAL
@@ -99,6 +101,8 @@ expr: literal { $$ = $1; }
     | expr '/' expr { $$ = new BinaryExpressionNode($1, BinaryOp::DIVIDE, $3); }
     | expr '<' expr { $$ = new BinaryExpressionNode($1, BinaryOp::LESS_THAN, $3); }
     | expr '>' expr { $$ = new BinaryExpressionNode($1, BinaryOp::GREATER_THAN, $3); }
+    | expr LESS_THAN_OR_EQUAL expr { $$ = new BinaryExpressionNode($1, BinaryOp::LESS_THAN_OR_EQUAL, $3); }
+    | expr GREATER_THAN_OR_EQUAL expr { $$ = new BinaryExpressionNode($1, BinaryOp::GREATER_THAN_OR_EQUAL, $3); }
     | expr LOGICAL_AND expr { $$ = new BinaryExpressionNode($1, BinaryOp::LOGICAL_AND, $3); }
     | expr LOGICAL_OR expr { $$ = new BinaryExpressionNode($1, BinaryOp::LOGICAL_OR, $3); }
     ;

@@ -24,6 +24,8 @@ for                     { lexerColumnNumber += yyleng; autoInsertSemicolon = fal
 \/=                     { lexerColumnNumber += yyleng; autoInsertSemicolon = false; return QUOTIENT_ASSIGN; }
 \&\&                    { lexerColumnNumber += yyleng; autoInsertSemicolon = false; return LOGICAL_AND; }
 \|\|                    { lexerColumnNumber += yyleng; autoInsertSemicolon = false; return LOGICAL_OR; }
+\<\=                    { lexerColumnNumber += yyleng; autoInsertSemicolon = false; return LESS_THAN_OR_EQUAL; }
+\>\=                    { lexerColumnNumber += yyleng; autoInsertSemicolon = false; return GREATER_THAN_OR_EQUAL; }
 \"(\\.|[^\\"])*\"       { lexerColumnNumber += yyleng; autoInsertSemicolon = true; char *s = yytext + 1; s[yyleng - 2] = '\0'; yylval.sval = strdup(s); return STRING_LITERAL; }
 [+-]?[0-9]+             { lexerColumnNumber += yyleng; autoInsertSemicolon = true; yylval.ival = atoll(yytext); return INT_LITERAL; }
 [+-]?[0-9]*\.[0-9]+     { lexerColumnNumber += yyleng; autoInsertSemicolon = true; yylval.fval = atof(yytext); return FLOAT_LITERAL; }

@@ -128,6 +128,26 @@ namespace Operations {
         }
     }
 
+    Value lessThanOrEqual(Value val1, Value val2) {
+        switch (TYPE_PAIR(val1.type, val2.type)) {
+            case TYPE_PAIR(ValueType::INT, ValueType::INT):
+                return Value(getIntValue(val1) <= getIntValue(val2));
+                break;
+            case TYPE_PAIR(ValueType::REAL, ValueType::INT):
+                return Value(getDoubleValue(val1) <= static_cast<double>(getIntValue(val2)));
+                break;
+            case TYPE_PAIR(ValueType::INT, ValueType::REAL):
+                return Value(static_cast<double>(getIntValue(val1)) <= getDoubleValue(val2));
+                break;
+            case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
+                return Value(getDoubleValue(val1) <= getDoubleValue(val2));
+                break;
+            default:
+                printf("error: unsupported operand type(s) for <=\n");
+                exit(1);
+        }
+    }
+
     Value greaterThan(Value val1, Value val2) {
         switch (TYPE_PAIR(val1.type, val2.type)) {
             case TYPE_PAIR(ValueType::INT, ValueType::INT):
@@ -144,6 +164,26 @@ namespace Operations {
                 break;
             default:
                 printf("error: unsupported operand type(s) for >\n");
+                exit(1);
+        }
+    }
+
+    Value greaterThanOrEqual(Value val1, Value val2) {
+        switch (TYPE_PAIR(val1.type, val2.type)) {
+            case TYPE_PAIR(ValueType::INT, ValueType::INT):
+                return Value(getIntValue(val1) >= getIntValue(val2));
+                break;
+            case TYPE_PAIR(ValueType::REAL, ValueType::INT):
+                return Value(getDoubleValue(val1) >= static_cast<double>(getIntValue(val2)));
+                break;
+            case TYPE_PAIR(ValueType::INT, ValueType::REAL):
+                return Value(static_cast<double>(getIntValue(val1)) >= getDoubleValue(val2));
+                break;
+            case TYPE_PAIR(ValueType::REAL, ValueType::REAL):
+                return Value(getDoubleValue(val1) >= getDoubleValue(val2));
+                break;
+            default:
+                printf("error: unsupported operand type(s) for >=\n");
                 exit(1);
         }
     }
@@ -175,6 +215,12 @@ namespace Operations {
                 break;
             case BinaryOp::LESS_THAN:
                 return Operations::lessThan(value1, value2);
+                break;
+            case BinaryOp::GREATER_THAN_OR_EQUAL:
+                return Operations::greaterThanOrEqual(value1, value2);
+                break;
+            case BinaryOp::LESS_THAN_OR_EQUAL:
+                return Operations::lessThanOrEqual(value1, value2);
                 break;
             case BinaryOp::LOGICAL_AND:
                 return Operations::logicalAnd(value1, value2);
