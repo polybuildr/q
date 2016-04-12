@@ -29,7 +29,7 @@ for                     { lexerColumnNumber += yyleng; autoInsertSemicolon = fal
 \"(\\.|[^\\"])*\"       { lexerColumnNumber += yyleng; autoInsertSemicolon = true; char *s = yytext + 1; s[yyleng - 2] = '\0'; yylval.sval = strdup(s); return STRING_LITERAL; }
 [+-]?[0-9]+             { lexerColumnNumber += yyleng; autoInsertSemicolon = true; yylval.ival = atoll(yytext); return INT_LITERAL; }
 [+-]?[0-9]*\.[0-9]+     { lexerColumnNumber += yyleng; autoInsertSemicolon = true; yylval.fval = atof(yytext); return FLOAT_LITERAL; }
-[@+\-*/={};()<>]        { lexerColumnNumber += yyleng; autoInsertSemicolon = false; return yytext[0]; }
+[@+\-*/={};()<>!]        { lexerColumnNumber += yyleng; autoInsertSemicolon = false; return yytext[0]; }
 [[:alpha:]][[:alnum:]]* { lexerColumnNumber += yyleng; autoInsertSemicolon = true; yylval.sval = strdup(yytext); return IDENTIFIER; }
 [\t ]                   { lexerColumnNumber += yyleng; /* ignore */ }
 \n                      { lexerColumnNumber = 1; lexerLineNumber++; if (autoInsertSemicolon) return ';'; }

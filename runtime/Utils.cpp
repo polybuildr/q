@@ -233,4 +233,13 @@ namespace Operations {
                 exit(1);
         }
     }
+
+    Value performUnary(Value expr, char op) {
+        if (op == '!') {
+            return Value(!getBoolValue(expr));
+        } else {
+            printf("error: undefined unary operation, exiting\n");
+            exit(1);
+        }
+    }
 };

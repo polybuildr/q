@@ -15,6 +15,7 @@ class DeclarationNode;
 class PrintNode;
 class LocationNode;
 class BinaryExpressionNode;
+class UnaryExpressionNode;
 class IntLiteralNode;
 class FloatLiteralNode;
 class BoolLiteralNode;
@@ -35,6 +36,7 @@ public:
     void visit(PrintNode *);
     Value visit(LocationNode *);
     Value visit(BinaryExpressionNode *);
+    Value visit(UnaryExpressionNode *);
     Value visit(IntLiteralNode *);
     Value visit(FloatLiteralNode *);
     Value visit(BoolLiteralNode *);

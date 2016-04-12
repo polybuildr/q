@@ -48,6 +48,12 @@ op(op) {
     nodeType = NodeType::BINARY_EXPR;
 }
 
+UnaryExpressionNode::UnaryExpressionNode(ASTNode *expr, char op):
+expr(expr),
+op(op) {
+    nodeType = NodeType::UNARY_EXPR;
+}
+
 IntLiteralNode::IntLiteralNode(int64_t value):
 value(value) {
     nodeType = NodeType::INT_LITERAL;

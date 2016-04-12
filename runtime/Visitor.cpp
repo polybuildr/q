@@ -28,6 +28,9 @@ Value Visitor::callAndGetValueFrom(ASTNode *node) {
         case NodeType::BINARY_EXPR:
             return visit(static_cast<BinaryExpressionNode *>(node));
             break;
+        case NodeType::UNARY_EXPR:
+            return visit(static_cast<UnaryExpressionNode *>(node));
+            break;
         case NodeType::INT_LITERAL:
             return visit(static_cast<IntLiteralNode *>(node));
             break;
@@ -173,6 +176,13 @@ Value Visitor::visit(BinaryExpressionNode *node) {
         callAndGetValueFrom(node->expr1),
         node->op,
         callAndGetValueFrom(node->expr2)
+    );
+}
+
+Value Visitor::visit(UnaryExpressionNode *node) {
+    return Operations::performUnary(
+        callAndGetValueFrom(node->expr),
+        node->op
     );
 }
 

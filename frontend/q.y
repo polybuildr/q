@@ -38,14 +38,8 @@ StatementsListNode *program;
 %token <sval> IDENTIFIER
 %token <sval> STRING_LITERAL
 
-%type <node> statements statement statementElem assignment declaration printer expr location literal block
+%type <node> statements statement statementElem assignment declaration printer expr location literal block rel_expr logical_expr additive_expr multiplicative_expr unary_expr simple_expr
 %type <assignOp> assignOp
-
-%left LOGICAL_OR
-%left LOGICAL_AND
-%left '<' '>'
-%left '-' '+'
-%left '*' '/'
 
 %right "then" ELSE
 
@@ -65,7 +59,7 @@ statement: statementElem ';'
          ;
 
 statementElem: assignment
-       | declaration
+             | declaration
        | printer
        ;
 
@@ -93,19 +87,38 @@ location: IDENTIFIER { $$ = new LocationNode($1); free($1); }
 printer: '@' expr { $$ = new PrintNode($2); }
        ;
 
-expr: literal { $$ = $1; }
-    | location
-    | expr '+' expr { $$ = new BinaryExpressionNode($1, BinaryOp::ADD, $3); }
-    | expr '-' expr { $$ = new BinaryExpressionNode($1, BinaryOp::SUBTRACT, $3); }
-    | expr '*' expr { $$ = new BinaryExpressionNode($1, BinaryOp::MULTIPLY, $3); }
-    | expr '/' expr { $$ = new BinaryExpressionNode($1, BinaryOp::DIVIDE, $3); }
-    | expr '<' expr { $$ = new BinaryExpressionNode($1, BinaryOp::LESS_THAN, $3); }
-    | expr '>' expr { $$ = new BinaryExpressionNode($1, BinaryOp::GREATER_THAN, $3); }
-    | expr LESS_THAN_OR_EQUAL expr { $$ = new BinaryExpressionNode($1, BinaryOp::LESS_THAN_OR_EQUAL, $3); }
-    | expr GREATER_THAN_OR_EQUAL expr { $$ = new BinaryExpressionNode($1, BinaryOp::GREATER_THAN_OR_EQUAL, $3); }
-    | expr LOGICAL_AND expr { $$ = new BinaryExpressionNode($1, BinaryOp::LOGICAL_AND, $3); }
-    | expr LOGICAL_OR expr { $$ = new BinaryExpressionNode($1, BinaryOp::LOGICAL_OR, $3); }
+expr: logical_expr { $$ = $1; }
     ;
+
+logical_expr: logical_expr LOGICAL_AND rel_expr { $$ = new BinaryExpressionNode($1, BinaryOp::LOGICAL_AND, $3); }
+            | logical_expr LOGICAL_OR rel_expr { $$ = new BinaryExpressionNode($1, BinaryOp::LOGICAL_OR, $3); }
+            | rel_expr { $$ = $1; }
+            ;
+
+rel_expr: rel_expr '<' additive_expr { $$ = new BinaryExpressionNode($1, BinaryOp::LESS_THAN, $3); }
+        | rel_expr '>' additive_expr { $$ = new BinaryExpressionNode($1, BinaryOp::GREATER_THAN, $3); }
+        | rel_expr LESS_THAN_OR_EQUAL additive_expr { $$ = new BinaryExpressionNode($1, BinaryOp::LESS_THAN_OR_EQUAL, $3); }
+        | rel_expr GREATER_THAN_OR_EQUAL additive_expr { $$ = new BinaryExpressionNode($1, BinaryOp::GREATER_THAN_OR_EQUAL, $3); }
+        | additive_expr { $$ = $1; }
+        ;
+
+additive_expr: additive_expr '+' multiplicative_expr { $$ = new BinaryExpressionNode($1, BinaryOp::ADD, $3); }
+             | additive_expr '-' multiplicative_expr { $$ = new BinaryExpressionNode($1, BinaryOp::SUBTRACT, $3); }
+             | multiplicative_expr { $$ = $1; }
+             ;
+
+multiplicative_expr: multiplicative_expr '*' unary_expr { $$ = new BinaryExpressionNode($1, BinaryOp::MULTIPLY, $3); }
+                   | multiplicative_expr '/' unary_expr { $$ = new BinaryExpressionNode($1, BinaryOp::DIVIDE, $3); }
+                   | unary_expr { $$ = $1; }
+                   ;
+
+unary_expr: '!' unary_expr { $$ = new UnaryExpressionNode($2, '!'); }
+          | simple_expr { $$ = $1; }
+          ;
+
+simple_expr: location { $$ = $1; }
+           | literal { $$ = $1; }
+           ;
 
 literal: INT_LITERAL { $$ = new IntLiteralNode($1); }
        | FLOAT_LITERAL { $$ = new FloatLiteralNode($1); }

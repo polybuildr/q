@@ -17,6 +17,7 @@ enum class NodeType {
     PRINT,
     LOCATION,
     BINARY_EXPR,
+    UNARY_EXPR,
     INT_LITERAL,
     FLOAT_LITERAL,
     BOOL_LITERAL,
@@ -103,6 +104,14 @@ public:
     BinaryOp op;
 
     BinaryExpressionNode(ASTNode *expr1, BinaryOp op, ASTNode *expr2);
+};
+
+class UnaryExpressionNode: public ASTNode {
+public:
+    ASTNode *expr;
+    char op;
+
+    UnaryExpressionNode(ASTNode *expr, char op);
 };
 
 class IntLiteralNode: public ASTNode {
