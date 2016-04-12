@@ -113,6 +113,7 @@ multiplicative_expr: multiplicative_expr '*' unary_expr { $$ = new BinaryExpress
                    ;
 
 unary_expr: '!' unary_expr { $$ = new UnaryExpressionNode($2, '!'); }
+          | '-' unary_expr { $$ = new UnaryExpressionNode($2, '-'); }
           | simple_expr { $$ = $1; }
           ;
 

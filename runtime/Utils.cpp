@@ -237,6 +237,8 @@ namespace Operations {
     Value performUnary(Value expr, char op) {
         if (op == '!') {
             return Value(!getBoolValue(expr));
+        } else if (op == '-') {
+            return performBinary(Value(static_cast<int64_t>(0)), BinaryOp::SUBTRACT, expr);
         } else {
             printf("error: undefined unary operation, exiting\n");
             exit(1);
